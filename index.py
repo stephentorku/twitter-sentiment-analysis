@@ -1,5 +1,5 @@
 from flask import Flask, url_for, render_template
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+# from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.special import softmax
 import pandas as pd
 import matplotlib.pyplot as plt
