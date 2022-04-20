@@ -7,10 +7,10 @@ import numpy as np
 
 app = Flask(__name__)
 
-roberta = "cardiffnlp/twitter-roberta-base-sentiment"
+# roberta = "cardiffnlp/twitter-roberta-base-sentiment"
 
-model = AutoModelForSequenceClassification.from_pretrained(roberta)
-tokenizer = AutoTokenizer.from_pretrained(roberta)
+# model = AutoModelForSequenceClassification.from_pretrained(roberta)
+# tokenizer = AutoTokenizer.from_pretrained(roberta)
 
 
 

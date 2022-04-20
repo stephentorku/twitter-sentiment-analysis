@@ -1,17 +1,31 @@
-from alpha_vantage.timeseries import TimeSeries 
-import matplotlib.pyplot as plt 
-import sys
+from alpha_vantage.timeseries import TimeSeries
+import pandas as pd
+from datetime import datetime
+
 
 def stockchart(symbol,date):
-    ts = TimeSeries(key='P6WMOOB9UD8YMDTB', output_format='pandas')
-    data, meta_data = ts.get_intraday(symbol=symbol, interval='30min', outputsize='full')
-    data_date_changed = data.loc[date]
-    # data_date_changed['4. close'].plot()
-    # data_date_changed.loc[date].plot()
-    print(data_date_changed['4. close'])
-    # plt.title('Stock chart')
-    # plt.show()
+    arr_num=[]
+    ts = TimeSeries(key = 'P6WMOOB9UD8YMDTB', output_format = 'csv')
 
+    #download the csv
+    totalData = ts.get_intraday(symbol = symbol, interval = '30min', outputsize='full')
+
+    #csv --> dataframe
+    df = pd.DataFrame(list(totalData[0]))
+
+    #setup of column and index
+    header_row=0
+    df.columns = df.iloc[header_row]
+    df = df.drop(header_row)
+    # df.set_index('time', inplace=False)
+    df['Time'] = pd.to_datetime(df['timestamp']).dt.time
+    df['Date'] =pd.to_datetime(df['timestamp']).dt.date
+    dateT=datetime.strptime(date, '%Y-%m-%d').date()
+
+    for i in df.index:
+        if(df['Date'][i] == dateT):
+            arr_num.append({"label":str(df['Time'][i]), "value":df['close'][i]})
+    print(arr_num)
 symbol=input("Enter symbol name:") 
 date=input("Enter the start date:")
-stockchart(symbol,date)
+stockchart(symbol,date)   
