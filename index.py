@@ -56,8 +56,8 @@ def get_sentiments(input_date, company_name):
             else:
                 positive_sentiment_count+=1
             
-            values = [negative_sentiment_count, positive_sentiment_count, neutral_sentiment_count]
-            return values
+    values = [negative_sentiment_count, positive_sentiment_count, neutral_sentiment_count]
+    return values
 
 
 @app.route("/", methods=['POST', 'GET'])
