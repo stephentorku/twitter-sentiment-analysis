@@ -133,7 +133,7 @@
                                       </div>
                                       <div>
                                         <div class="dropdown">
-                                          <input type="date" max="2022-04-19" id="date-picker">
+                                          <input type="date" max="2022-04-19" id="date-picker" name="stock_date" id="stock_date">
                                         </div>
                                       </div>
                                     </div>
@@ -209,10 +209,14 @@
        */
       'use strict';
       var data = {
-        labels: ["2013", "2014", "2014", "2015", "2016", "2017"],
+        labels : ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        //labels: [{% for label in labels %} {{label}},{% endfor %}],
+        //labels: {{labels}},
         datasets: [{
-          label: '# of Votes',
-          data: [10, 19, 3, 5, 2, 3],
+          label: 'Stock Prices',
+          data: [12, 19, 3, 5, 2, 3]
+          //data: [{% for value in stock_list %} {{value}},{% endfor %}],
+          //data: {{stock_list}},
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',

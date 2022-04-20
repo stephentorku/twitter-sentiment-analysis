@@ -1,3 +1,4 @@
+from numpy import array
 from alpha_vantage.timeseries import TimeSeries
 import pandas as pd
 from datetime import datetime
@@ -25,7 +26,7 @@ def stockchart(symbol,date):
     for i in df.index:
         if(df['Date'][i] == dateT):
             arr_num.append({"label":str(df['Time'][i]), "value":df['close'][i]})
-    print(arr_num)
+    return arr_num
 symbol=input("Enter symbol name:") 
 date=input("Enter the start date:")
 stockchart(symbol,date)   
