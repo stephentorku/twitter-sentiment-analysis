@@ -84,7 +84,7 @@
                   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
 
 
-                    <form method ="post" action="#">
+                    <form method ="POST" id="#post-form">
                      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                       <li class="nav-item" role="presentation">
                         <input type="text" name="company_name" id = "company_name" placeholder = "Name of Company" >
@@ -599,6 +599,28 @@
 })
 });
 
+
+$(document).on('submit','#post-form',function(e){
+  e.preventDefault();
+
+  $.ajax({
+    type:'POST',
+    url:"/get_data",
+    data:{
+        company_name :$('#company_name').val(),
+        sentiment_date:$('#sentiment_date').val(),
+        stock_date:$('#stock_date').val(),
+    },
+    success: function(data){
+       //alert(data)
+    }
+  });
+  console.log("post")
+  console.log(company_name)
+  console.log(sentiment_date)
+  console.log(stock_date)
+  document.getElementById('company_name').value = ''
+});
 
 </script>
 
