@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
+import json
+import flask
 
 
 app = Flask(__name__)
@@ -106,9 +108,22 @@ def index():
     # for dic in stock_values:
     #     labels.append(dic['label'])
     #     stock_list.append(float(dic['value']))
+    # values = get_sentiments("2022-04-09", "TSLA")
+    return render_template("index.html")
+    # return render_template("index.html", vals=values)
+
+@app.route('/get_data',  methods=['POST', 'GET'])
+def get_data():
+#   labels = ["Africa", "Asia", "Europe", "Latin America", "North America"]
+#   data = [5578,5267,734,784,433]
+    labels = []
+    stock_list=[]
+    stock_values = stockchart("TSLA", "2022-04-12")
+    for dic in stock_values:
+        labels.append(dic['label'])
+        stock_list.append(float(dic['value']))
     values = get_sentiments("2022-04-09", "TSLA")
-    # return render_template("index.html", vals=values, labels=labels, stock_list=stock_list, stocks =stock_values)
-    return render_template("index.html", vals=values)
+    return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values})})
 
 
 if __name__ == "__main__":
