@@ -95,10 +95,14 @@ def index():
 def get_data():
     labels = []
     stock_list=[]
-    if request.method == 'POST':
-        company_name = request.data['company_name']
-        sentiment_date = request.data['sentiment_date']
-        stock_date = request.data['stock_date']
+    if request.method == "POST":
+        print("post")
+        print(request.form['company_name'])
+        print(request.form['sentiment_date'])
+        print(request.form['stock_date'])
+        company_name = request.form['company_name']
+        sentiment_date = request.form['sentiment_date']
+        stock_date = request.form['stock_date']
         values = get_sentiments(sentiment_date, company_name)
         stock_values = stockchart(company_name, stock_date)
         for dic in stock_values:
@@ -106,7 +110,7 @@ def get_data():
             stock_list.append(float(dic['value']))
         return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values})})
     else:
-        stock_values = stockchart("TSLA", "2022-04-12")
+        stock_values = stockchart("GOOG", "2022-04-12")
         for dic in stock_values:
             labels.append(dic['label'])
             stock_list.append(float(dic['value']))
@@ -115,7 +119,7 @@ def get_data():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
 
 
 #not found gives an error

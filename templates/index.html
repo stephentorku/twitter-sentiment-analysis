@@ -8,7 +8,7 @@
   <title>Twitter Sentiment Analysis </title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <!-- plugins:css -->
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/feather/feather.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/feather/feather.css')}}"> 
   <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/mdi/css/materialdesignicons.min.css')}}">
   <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/ti-icons/css/themify-icons.css')}}">
   <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/typicons/typicons.css')}}">
@@ -83,14 +83,14 @@
                   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
 
 
-<form method ="POST" id="#post-form">
+<form method ="POST" id="post-form" name="post-form">
                      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                       <li class="nav-item" role="presentation">
 <input type="text" name="company_name" id = "company_name" placeholder = "Name of Company" >
                   
                       </li>
                       <li class="nav-item" role="presentation">
-<input class="nav-link active" type="submit" value="Analyze">
+                        here
                       </li>
                     </ul>
 
@@ -110,7 +110,7 @@
                                       
                                       <div>
                                         <div class="dropdown">
-                                          <input type="date" max="2022-04-19" id="date-picker" name="sentiment_date" id="sentiment_date">
+<input type="date" max="2022-04-19" name="sentiment_date" id="sentiment_date">
                                         </div>
                                       </div>
                                     </div>
@@ -135,11 +135,11 @@
                                       </div>
                                       <div>
                                         <div class="dropdown">
-<input type="date" max="2022-04-19" id="date-picker" name="stock_date" id="stock_date">
+<input type="date" max="2022-04-19" name="stock_date" id="stock_date">
                                         </div>
                                       </div>
                                     </div>
-</form>
+
                                     <div class="chartjs-bar-wrapper mt-3">
                                       <canvas id="lineChart"></canvas>
                                     </div>
@@ -160,6 +160,8 @@
             </div>
           </div>
         </div>
+        <input class="nav-link active" type="submit" value="Analyze">
+      </form>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
@@ -209,6 +211,31 @@
       //var _data;
       //var _labels;
       console.log("working")
+
+      $("#post-form").submit(function(e){
+        e.preventDefault();
+        console.log("post")
+      
+        $.ajax({
+          type:'POST',
+          url:"/get_data",
+          data:{
+              company_name :$('#company_name').val(),
+              sentiment_date:$('#sentiment_date').val(),
+              stock_date:$('#stock_date').val(),
+          },
+          success: function(data){
+            console.log("success post");
+             //alert(data)
+          }
+        });
+        
+        console.log(company_name)
+        console.log(sentiment_date)
+        console.log(stock_date)
+        document.getElementById('company_name').value = ''
+      });
+      
      $.ajax({
       url: "/get_data",
       type: "GET",
@@ -598,29 +625,6 @@
 })
 });
 
-
-$(document).on('submit','#post-form', function(e){
-  console.log("post")
-  e.preventDefault();
-
-  $.ajax({
-    type:'POST',
-    url:"/get_data",
-    data:{
-        company_name :$('#company_name').val(),
-        sentiment_date:$('#sentiment_date').val(),
-        stock_date:$('#stock_date').val(),
-    },
-    success: function(data){
-       //alert(data)
-    }
-  });
-  
-  console.log(company_name)
-  console.log(sentiment_date)
-  console.log(stock_date)
-  document.getElementById('company_name').value = ''
-});
 
 </script>
 
