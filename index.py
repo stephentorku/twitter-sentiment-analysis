@@ -1,10 +1,14 @@
-from select import select
 from flask import Flask, url_for, render_template, request
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.special import softmax
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from alpha_vantage.timeseries import TimeSeries
+from datetime import datetime
+import json
+import flask
+
 
 app = Flask(__name__)
 
@@ -59,16 +63,54 @@ def get_sentiments(input_date, company_name):
     values = [negative_sentiment_count, positive_sentiment_count, neutral_sentiment_count]
     return values
 
+def stockchart(symbol,date):
+    arr_num=[]
+    ts = TimeSeries(key = 'P6WMOOB9UD8YMDTB', output_format = 'csv')
+
+    #download the csv
+    totalData = ts.get_intraday(symbol = symbol, interval = '30min', outputsize='full')
+
+    #csv --> dataframe
+    df = pd.DataFrame(list(totalData[0]))
+
+    #setup of column and index
+    header_row=0
+    df.columns = df.iloc[header_row]
+    df = df.drop(header_row)
+    # df.set_index('time', inplace=False)
+    df['Time'] = pd.to_datetime(df['timestamp']).dt.time
+    df['Date'] =pd.to_datetime(df['timestamp']).dt.date
+    dateT=datetime.strptime(date, '%Y-%m-%d').date()
+
+    for i in df.index:
+        if(df['Date'][i] == dateT):
+            arr_num.append({"label":str(df['Time'][i]), "value":df['close'][i]})
+    return arr_num
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
+    return render_template("index.html")
+
+@app.route('/get_data',  methods=['POST', 'GET'])
+def get_data():
+    labels = []
+    stock_list=[]
     if request.method == 'POST':
         company_name = request.form['company_name']
-        date = request.form['sentiment_date']
-        values = get_sentiments(date, company_name)
-        return render_template("index.html", vals=values)
-    values = get_sentiments("2022-04-09", "amazon")
-    return render_template("index.html", vals=values)
+        sentiment_date = request.form['sentiment_date']
+        stock_date = request.form['stock_date']
+        values = get_sentiments(sentiment_date, company_name)
+        stock_values = stockchart(company_name, stock_date)
+        for dic in stock_values:
+            labels.append(dic['label'])
+            stock_list.append(float(dic['value']))
+        return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values})})
+    stock_values = stockchart("TSLA", "2022-04-12")
+    for dic in stock_values:
+        labels.append(dic['label'])
+        stock_list.append(float(dic['value']))
+    values = get_sentiments("2022-04-09", "TSLA")
+    return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values})})
 
 
 if __name__ == "__main__":
