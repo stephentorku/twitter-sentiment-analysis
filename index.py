@@ -63,7 +63,6 @@ def get_sentiments(input_date, company_name):
     values = [negative_sentiment_count, positive_sentiment_count, neutral_sentiment_count]
     return values
 
-
 def stockchart(symbol,date):
     arr_num=[]
     ts = TimeSeries(key = 'P6WMOOB9UD8YMDTB', output_format = 'csv')
