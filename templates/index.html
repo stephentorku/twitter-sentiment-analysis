@@ -84,14 +84,14 @@
                   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
 
 
-                    <form method ="POST" id="#post-form">
+<form method ="POST" id="#post-form">
                      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                       <li class="nav-item" role="presentation">
-                        <input type="text" name="company_name" id = "company_name" placeholder = "Name of Company" >
+<input type="text" name="company_name" id = "company_name" placeholder = "Name of Company" >
                   
                       </li>
                       <li class="nav-item" role="presentation">
-                        <input class="nav-link active" type="submit" value="Analyze">
+<input class="nav-link active" type="submit" value="Analyze">
                       </li>
                     </ul>
 
@@ -136,11 +136,11 @@
                                       </div>
                                       <div>
                                         <div class="dropdown">
-                                          <input type="date" max="2022-04-19" id="date-picker" name="stock_date" id="stock_date">
+<input type="date" max="2022-04-19" id="date-picker" name="stock_date" id="stock_date">
                                         </div>
                                       </div>
                                     </div>
-                                  </form>
+</form>
                                     <div class="chartjs-bar-wrapper mt-3">
                                       <canvas id="lineChart"></canvas>
                                     </div>
@@ -600,7 +600,8 @@
 });
 
 
-$(document).on('submit','#post-form',function(e){
+$(document).on('submit','#post-form', function(e){
+  console.log("post")
   e.preventDefault();
 
   $.ajax({
@@ -615,7 +616,7 @@ $(document).on('submit','#post-form',function(e){
        //alert(data)
     }
   });
-  console.log("post")
+  
   console.log(company_name)
   console.log(sentiment_date)
   console.log(stock_date)
