@@ -93,16 +93,16 @@ def index():
 
 @app.route('/get_data',  methods=['POST', 'GET'])
 def get_data():
-    labels = []
-    stock_list=[]
     if request.method == "POST":
+        labels=[]
+        stock_list=[]
         print("post")
         print(request.form['company_name'])
         print(request.form['sentiment_date'])
         print(request.form['stock_date'])
-        company_name = request.form['company_name']
-        sentiment_date = request.form['sentiment_date']
-        stock_date = request.form['stock_date']
+        company_name = str(request.form['company_name'])
+        sentiment_date = str(request.form['sentiment_date'])
+        stock_date = str(request.form['stock_date'])
         values = get_sentiments(sentiment_date, company_name)
         stock_values = stockchart(company_name, stock_date)
         for dic in stock_values:
@@ -110,11 +110,13 @@ def get_data():
             stock_list.append(float(dic['value']))
         return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values})})
     else:
-        stock_values = stockchart("GOOG", "2022-04-12")
+        labels = []
+        stock_list=[]
+        stock_values = stockchart("AMZN", "2022-04-12")
         for dic in stock_values:
             labels.append(dic['label'])
             stock_list.append(float(dic['value']))
-        values = get_sentiments("2022-04-09", "TSLA")
+        values = get_sentiments("2022-04-09", "Amazon")
         return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values})})
 
 
