@@ -44,9 +44,9 @@
           <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
             <h1 class="welcome-text "> <span class="text-black fw-bold">Sentiment Analysis {{positive_count}}</span></h1>
 
-            <h3 class="welcome-sub-text">Through natural language processing, we compare sentiments from tweets to
+            <div style="width:60%"><h3 class="welcome-sub-text">Through natural language processing, we compare sentiments from tweets to
               stock prices within a given day to find out if there is a correlation between sentiments on twitter and stock
-              prices.
+                prices.</h3></div>
 
           </li>
         </ul>
@@ -84,15 +84,24 @@
 
 
 <form method ="POST" id="post-form" name="post-form">
+    <div style="padding-left: 80%">
                      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                       <li class="nav-item" role="presentation">
-<input type="text" name="company_name" id = "company_name" placeholder = "Name of Company" >
-                  
+
+<select name="company_name" id="company_name">
+    <option value="AMZN">Amazon</option>
+    <option value="TSLA">Tesla</option>
+    <option value="GOOG">Google</option>
+</select>
+<!--<input type="text" name="company_name" id = "company_name" placeholder = "Name of Company" >-->
+
+
                       </li>
                       <li class="nav-item" role="presentation">
-                        here
+                        <input class="nav-link active" type="submit" value="Analyze">
                       </li>
                     </ul>
+        </div>
 
                     <div class="tab-content" id="pills-tabContent">
                       <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -160,7 +169,7 @@
             </div>
           </div>
         </div>
-        <input class="nav-link active" type="submit" value="Analyze">
+
       </form>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
@@ -208,6 +217,8 @@
 <script>
 
     $(document).ready(function(){
+    document.getElementById("sentiment_date").defaultValue="2022-04-09"
+    document.getElementById("stock_date").defaultValue="2022-04-12"
       //var _data;
       //var _labels;
       console.log("working")
@@ -232,6 +243,9 @@
             const _postdata = full_data['data'];
             const _postlabels = full_data['labels'];
             const _postsentiments = full_data['sentiments']
+            const _min = full_data['minimum']
+            const _max = full_data['maximum']
+
             console.log("in post")
             
             console.log(full_data)
@@ -253,6 +267,7 @@
                 datasets: [{
                   label: 'Stock Prices',
                   data: _postdata,
+
                   //data: [{% for value in stock_list %} {{value}},{% endfor %}],
                   //data: {{stock_list}},
                   backgroundColor: [
@@ -273,8 +288,8 @@
                   ],
                   borderWidth: 1,
                   fill: false
-                }]
-              };
+                },]
+            };
               var multiLineData = {
                 labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
                 datasets: [{
@@ -309,8 +324,11 @@
               var options = {
                 scales: {
                   yAxes: [{
+                    display: true,
                     ticks: {
-                      beginAtZero: true
+                      beginAtZero: true,
+                      min:Math.floor(_min),
+                      max:Math.ceil(_max)
                     }
                   }]
                 },
@@ -625,6 +643,8 @@
         const _data = full_data['data'];
         const _labels = full_data['labels'];
         const _sentiments = full_data['sentiments']
+        const _min = full_data['minimum']
+        const _max = full_data['maximum']
         console.log(full_data)
       
 
@@ -701,7 +721,10 @@
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              stepSize:20,
+              min:Math.floor(_min),
+              max:Math.ceil(_max)
             }
           }]
         },

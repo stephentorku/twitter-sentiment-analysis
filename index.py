@@ -108,7 +108,7 @@ def get_data():
         for dic in stock_values:
             labels.append(dic['label'])
             stock_list.append(float(dic['value']))
-        return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values})})
+        return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values , "minimum":min(list(stock_list)), "maximum":max(list(stock_list)) })})
     else:
         labels = []
         stock_list=[]
@@ -117,7 +117,7 @@ def get_data():
             labels.append(dic['label'])
             stock_list.append(float(dic['value']))
         values = get_sentiments("2022-04-09", "Amazon")
-        return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values})})
+        return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values, "minimum":min(list(stock_list)), "maximum":max(list(stock_list))} )})
 
 
 if __name__ == "__main__":
