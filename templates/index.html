@@ -39,10 +39,10 @@
         </div>
         
       </div>
-      <div class="navbar-menu-wrapper d-flex align-items-top"> 
-        <ul class="navbar-nav topspace">
-          <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-            <h1 class="welcome-text "> <span class="text-black fw-bold">Sentiment Analysis {{positive_count}}</span></h1>
+      <div class="navbar-menu-wrapper d-flex align-items-top" style="height: 100px"> 
+        <ul class="navbar-nav topspace"> 
+          <li class="nav-item font-weight-semibold d-none d-lg-block ms-0" >
+            <h1 class="welcome-text "> <span class="text-black fw-bold">Sentiment Analysis</span></h1>
 
             <div style="width:70%"><h3 class="welcome-sub-text">Through natural language processing, we compare sentiments from tweets to
               stock prices within a given day to find out if there is a correlation between sentiments on twitter and stock
@@ -356,15 +356,15 @@
               console.log(indexOfMaxValue)
               if (indexOfMaxValue == 0){
                 document.getElementById("sentiment_analysis").innerHTML=
-                "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiments in tweets about X company"
+                "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiments in tweets about " + company_name.value + ""
               }
               else if(indexOfMaxValue == 1){
                 document.getElementById("sentiment_analysis").innerHTML= 
-                "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiments in tweets about X company"
+                "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiments in tweets about " + company_name.value + ""
               }
               else if(indexOfMaxValue == 2) {
                 document.getElementById("sentiment_analysis").innerHTML= 
-                "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiments in tweets about X company"
+                "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiments in tweets about " + company_name.value + ""
               }
               else{
                 document.getElementById("sentiment_analysis").innerHTML= 
@@ -805,15 +805,15 @@
             console.log(indexOfMaxValue)
             if (indexOfMaxValue == 0){
               document.getElementById("sentiment_analysis").innerHTML=
-              "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiments in tweets about X company"
+              "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiments in tweets about " + company_name.value + ""
             }
             else if(indexOfMaxValue == 1){
               document.getElementById("sentiment_analysis").innerHTML= 
-              "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiments in tweets about X company"
+              "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiments in tweets about " + company_name.value + ""
             }
             else if(indexOfMaxValue == 2) {
               document.getElementById("sentiment_analysis").innerHTML= 
-              "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiments in tweets about X company"
+              "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiments in tweets about " + company_name.value + ""
             }
             else{
               document.getElementById("sentiment_analysis").innerHTML= 
