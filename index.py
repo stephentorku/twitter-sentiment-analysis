@@ -96,22 +96,23 @@ def get_data():
     if request.method == "POST":
         labels=[]
         stock_list=[]
-        print("post")
-        print(request.form['company_name'])
-        print(request.form['sentiment_date'])
-        print(request.form['stock_date'])
+
         company_name = str(request.form['company_name'])
         sentiment_date = str(request.form['sentiment_date'])
         stock_date = str(request.form['stock_date'])
+
         values = get_sentiments(sentiment_date, company_name)
         stock_values = stockchart(company_name, stock_date)
+
         for dic in stock_values:
             labels.append(dic['label'])
             stock_list.append(float(dic['value']))
         return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values , "minimum":min(list(stock_list)), "maximum":max(list(stock_list)) })})
+
     else:
         labels = []
         stock_list=[]
+        
         stock_values = stockchart("AMZN", "2022-04-12")
         for dic in stock_values:
             labels.append(dic['label'])

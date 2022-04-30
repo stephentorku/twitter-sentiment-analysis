@@ -44,7 +44,7 @@
           <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
             <h1 class="welcome-text "> <span class="text-black fw-bold">Sentiment Analysis {{positive_count}}</span></h1>
 
-            <div style="width:60%"><h3 class="welcome-sub-text">Through natural language processing, we compare sentiments from tweets to
+            <div style="width:70%"><h3 class="welcome-sub-text">Through natural language processing, we compare sentiments from tweets to
               stock prices within a given day to find out if there is a correlation between sentiments on twitter and stock
                 prices.</h3></div>
 
@@ -82,9 +82,13 @@
                 <div class="tab-content tab-content-basic">
                   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
 
-
+                    <div>
+                      Current Company Selection: <div id="company_selection"></div> <br>
+                      Current Tweet Date Selection: <div id="tweet_date_selection"></div> <br>
+                      Current Stock Date Selection:<div id="stock_date_selection"></div> <br>
+                    </div>
 <form method ="POST" id="post-form" name="post-form">
-    <div style="padding-left: 80%">
+    <div style="padding-left: 70%">
                      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                       <li class="nav-item" role="presentation">
 
@@ -119,7 +123,7 @@
                                       
                                       <div>
                                         <div class="dropdown">
-<input type="date" max="2022-04-19" name="sentiment_date" id="sentiment_date">
+<input type="date" name="sentiment_date" id="sentiment_date">
                                         </div>
                                       </div>
                                     </div>
@@ -144,7 +148,7 @@
                                       </div>
                                       <div>
                                         <div class="dropdown">
-<input type="date" max="2022-04-19" name="stock_date" id="stock_date">
+<input type="date" name="stock_date" id="stock_date">
                                         </div>
                                       </div>
                                     </div>
@@ -219,6 +223,39 @@
     $(document).ready(function(){
     document.getElementById("sentiment_date").defaultValue="2022-04-09"
     document.getElementById("stock_date").defaultValue="2022-04-12"
+
+    var company_selection = document.getElementById("company_name").value
+    var tweet_date_selection = document.getElementById("sentiment_date").value
+    var stock_date_selection = document.getElementById("stock_date").value
+
+
+    document.getElementById("company_selection").innerHTML= company_selection
+    document.getElementById("tweet_date_selection").innerHTML= tweet_date_selection
+    document.getElementById("stock_date_selection").innerHTML= stock_date_selection
+
+    document.getElementById('sentiment_date').onchange = function () {
+      document.getElementById('stock_date').setAttribute('value',  this.value);
+      document.getElementById('stock_date').setAttribute('min',  this.value);
+
+      var date_array = document.getElementById('stock_date').value.split("-")
+      var day = parseInt(date_array[2])+3
+      if(day < 10)
+        day = '0' + day.toString();
+      var maxDate = date_array[0] + '-' + date_array[1] + '-' + day
+
+      document.getElementById('stock_date').setAttribute('max',  maxDate);
+      
+    };
+    const stock_picker = document.getElementById('stock_date');
+    stock_picker.addEventListener('input', function(e){
+      var day = new Date(this.value).getUTCDay();
+      if([6,0].includes(day)){
+        e.preventDefault();
+        this.value = document.getElementById('sentiment_date').value;
+        alert('Weekends not allowed');
+      }
+    });
+    
       //var _data;
       //var _labels;
       console.log("working")

@@ -26967,7 +26967,7 @@ body.avgrund-active {
   /* margin-bottom: 20px !important; */
 }
 
-#date-picker{
+#sentiment_date{
   font-family: "Roboto";
   color: #5A6172;
   padding: 0.5rem;
@@ -26976,6 +26976,28 @@ body.avgrund-active {
   font-weight: 600;
   font-size: 16px;
   background-color: #F2F1F2;
+}
+
+#stock_date{
+  font-family: "Roboto";
+  color: #5A6172;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: #F2F1F2;
+  font-weight: 600;
+  font-size: 16px;
+  background-color: #F2F1F2;
+}
+
+#company_name{
+  font-family: "Roboto";
+  color: #5A6172;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: #F2F1F2;
+  font-weight: 600;
+  font-size: 16px;
+  background-color: #FFFFFF;
 }
 
 /* Chartist */
