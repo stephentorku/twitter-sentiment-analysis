@@ -83,12 +83,13 @@
                   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
 
                     <div>
-                      Current Company Selection: <div id="company_selection"></div> <br>
-                      Current Tweet Date Selection: <div id="tweet_date_selection"></div> <br>
-                      Current Stock Date Selection:<div id="stock_date_selection"></div> <br>
-                    </div>
+                      <div class="top_info_display">Current Company Selection: <div style="display:inline" id="company_selection"></div> </div>
+                      <div class="top_info_display">Current Tweet Date Selection: <div style="display:inline" id="tweet_date_selection"></div> </div>
+                      <div class="top_info_display">Current Stock Date Selection:<div style="display:inline" id="stock_date_selection"></div> </div>
+                    </div><br>
+
 <form method ="POST" id="post-form" name="post-form">
-    <div style="padding-left: 70%">
+    <div style="margin-left: 10px;">
                      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                       <li class="nav-item" role="presentation">
 
@@ -123,7 +124,7 @@
                                       
                                       <div>
                                         <div class="dropdown">
-<input type="date" name="sentiment_date" id="sentiment_date">
+                                        <input type="date" name="sentiment_date" id="sentiment_date">
                                         </div>
                                       </div>
                                     </div>
@@ -148,7 +149,7 @@
                                       </div>
                                       <div>
                                         <div class="dropdown">
-<input type="date" name="stock_date" id="stock_date">
+                                          <input type="date" name="stock_date" id="stock_date">
                                         </div>
                                       </div>
                                     </div>
@@ -163,7 +164,65 @@
                           </div>
                         </div>
                       </div>
+                      
+                    
+                    </div>
+                    <h2>Analysis of Graphs</h2>
+                    <div class="tab-content" id="pills-tabContent">
+                      <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div class="row">
 
+                          <div class="col-lg-6 d-flex flex-column">
+                            <div class="row flex-grow">
+                              <div class="col-12 grid-margin stretch-card">
+                                <div class="card card-rounded">
+                                  <div class="card-body">
+                                    <div class="d-sm-flex justify-content-between align-items-start">
+                                      <div>
+                                        <h4 class="card-title card-title-dash">Sentiment Graph Analysis</h4>
+                                      </div>
+                                      
+                                      <div>
+                                        <div class="dropdown">
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="chartjs-bar-wrapper mt-3">
+                                      <div id="sentiment_analysis">Analysis</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+    
+    
+                          <div class="col-lg-6 d-flex flex-column">
+                            <div class="row flex-grow">
+                              <div class="col-12 grid-margin stretch-card">
+                                <div class="card card-rounded">
+                                  <div class="card-body">
+                                    <div class="d-sm-flex justify-content-between align-items-start">
+                                      <div>
+                                        <h4 class="card-title card-title-dash">Stock Graph Analysis </h4>
+                                      </div>
+                                      <div>
+                                        <div class="dropdown">
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="chartjs-bar-wrapper mt-3">
+                                      <div id="stock_analysis">Analysis</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
                     
                     </div>
                     
@@ -173,8 +232,7 @@
             </div>
           </div>
         </div>
-
-      </form>
+</form>   
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
@@ -246,20 +304,23 @@
       document.getElementById('stock_date').setAttribute('max',  maxDate);
       
     };
-    const stock_picker = document.getElementById('stock_date');
-    stock_picker.addEventListener('input', function(e){
-      var day = new Date(this.value).getUTCDay();
-      if([6,0].includes(day)){
-        e.preventDefault();
-        this.value = document.getElementById('sentiment_date').value;
-        alert('Weekends not allowed');
-      }
-    });
-    
-      //var _data;
-      //var _labels;
-      console.log("working")
 
+
+    //function to restrict weekends for stock graph date picker
+    $(function(){
+        const stock_picker = document.getElementById('stock_date');
+        stock_picker.addEventListener('input', function(e){
+          var day = new Date(this.value).getUTCDay();
+          if([6,0].includes(day)){
+            e.preventDefault();
+            this.value = document.getElementById('sentiment_date').value;
+            alert('Weekends not allowed');
+          }
+        });
+    });
+
+
+    //POST ajax to  send data to backend after form is submitted
       $("#post-form").submit(function(e){
         e.preventDefault();
         console.log("post")
@@ -273,15 +334,65 @@
               stock_date:$('#stock_date').val(),
           },
           success: function(response){
+            //printing data in console
             console.log("success post");
             console.log($('#company_name').val());
 
+            //response from URL
             full_data = JSON.parse(response.payload);
             const _postdata = full_data['data'];
             const _postlabels = full_data['labels'];
             const _postsentiments = full_data['sentiments']
             const _min = full_data['minimum']
             const _max = full_data['maximum']
+
+
+            //function to analyze pie chart 
+            $(function(){
+
+
+              //finding index of maximum number of sentiments and displaying an analysis based on output
+              var indexOfMaxValue = _postsentiments.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+              console.log(indexOfMaxValue)
+              if (indexOfMaxValue == 0){
+                document.getElementById("sentiment_analysis").innerHTML=
+                "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiments in tweets about X company"
+              }
+              else if(indexOfMaxValue == 1){
+                document.getElementById("sentiment_analysis").innerHTML= 
+                "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiments in tweets about X company"
+              }
+              else if(indexOfMaxValue == 2) {
+                document.getElementById("sentiment_analysis").innerHTML= 
+                "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiments in tweets about X company"
+              }
+              else{
+                document.getElementById("sentiment_analysis").innerHTML= 
+                "There was a general sentiments in tweets about X company were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
+              }
+            });
+
+
+            //function to analyze stock graph
+            $(function(){
+              var first_stockprice =_postdata[0]; 
+              var last_stockprice =_postdata[_postdata.length-1];
+              //finding percentage change in price
+              var percentage_change = ((last_stockprice/first_stockprice) *100) - 100
+              var rounded_percentage_change = Math.round((percentage_change + Number.EPSILON) * 100) / 100
+              //finding peak and trough values
+              var peak_value = Math.max.apply(Math, _postdata)
+              var minimum_value = Math.min.apply(Math, _postdata)
+              console.log(peak_value)
+              console.log(minimum_value)
+              document.getElementById("stock_analysis").innerHTML= 
+              "There was a " 
+              + rounded_percentage_change.toString() + 
+              "% change in the " + company_name.value + " stock price. It started at $" + 
+              first_stockprice.toString()+ " and ended at $" + last_stockprice.toString()
+               + ". It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.";
+
+            });
 
             console.log("in post")
             
@@ -669,7 +780,7 @@
         //document.getElementById('company_name').value = ''
       });
       
-    //setInterval(function(){
+    
      $.ajax({
       url: "/get_data",
       type: "GET",
@@ -683,7 +794,53 @@
         const _min = full_data['minimum']
         const _max = full_data['maximum']
         console.log(full_data)
-      
+
+
+        //function to analyze pie chart 
+        $(function(){
+
+
+            //finding index of maximum number of sentiments and displaying an analysis based on output
+            var indexOfMaxValue = _sentiments.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+            console.log(indexOfMaxValue)
+            if (indexOfMaxValue == 0){
+              document.getElementById("sentiment_analysis").innerHTML=
+              "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiments in tweets about X company"
+            }
+            else if(indexOfMaxValue == 1){
+              document.getElementById("sentiment_analysis").innerHTML= 
+              "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiments in tweets about X company"
+            }
+            else if(indexOfMaxValue == 2) {
+              document.getElementById("sentiment_analysis").innerHTML= 
+              "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiments in tweets about X company"
+            }
+            else{
+              document.getElementById("sentiment_analysis").innerHTML= 
+              "There was a general sentiments in tweets about X company were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
+            }
+        });
+
+          $(function(){
+            var first_stockprice =_data[0]; 
+            var last_stockprice =_data[_data.length-1];
+            //finding percentage change in price
+            var percentage_change = ((last_stockprice/first_stockprice) *100) - 100
+            var rounded_percentage_change = Math.round((percentage_change + Number.EPSILON) * 100) / 100
+            //finding peak and trough values
+            var peak_value = Math.max.apply(Math, _data)
+            var minimum_value = Math.min.apply(Math, _data)
+            console.log(peak_value)
+            console.log(minimum_value)
+            document.getElementById("stock_analysis").innerHTML= 
+            "There was a " 
+            + rounded_percentage_change.toString() + 
+            "% change in the " + company_name.value + " stock price. It started at $" + 
+            first_stockprice.toString()+ " and ended at $" + last_stockprice.toString()
+              + ". It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.";
+
+          });
+                
 
 
     $(function() {
@@ -1062,7 +1219,7 @@
       
    
 })
-//},1000);
+
 });
 
 

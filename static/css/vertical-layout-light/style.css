@@ -31315,4 +31315,13 @@ div.tagsinput span.tag a {
   }
 }
 
+
+.top_info_display{
+  padding: 10px; 
+  background-color: white; 
+  border-radius: 10px; 
+  width: 30%;
+  display: inline;
+  margin-left: 10px;
+}
 /*# sourceMappingURL=../maps/vertical-layout-light/style.css.map */
