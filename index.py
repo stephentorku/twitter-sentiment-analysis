@@ -95,6 +95,7 @@ def index():
 @app.route('/get_data',  methods=['POST', 'GET'])
 def get_data():
     if request.method == "POST":
+        #lists for storing labels and stock prices from stock function
         labels=[]
         stock_list=[]
 
