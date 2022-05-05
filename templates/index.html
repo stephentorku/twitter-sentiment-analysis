@@ -83,9 +83,9 @@
                   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
 
                     <div>
-                      <div class="top_info_display">Current Company Selection: <div style="display:inline" id="company_selection"></div> </div>
-                      <div class="top_info_display">Current Tweet Date Selection: <div style="display:inline" id="tweet_date_selection"></div> </div>
-                      <div class="top_info_display">Current Stock Date Selection:<div style="display:inline" id="stock_date_selection"></div> </div>
+                      <div class="top_info_display"><strong>Company Selection:</strong> <div style="display:inline" id="company_selection"></div> </div>
+                      <div class="top_info_display"><strong>Tweet Date Selection:</strong> <div style="display:inline" id="tweet_date_selection"></div> </div>
+                      <div class="top_info_display"><strong>Stock Date Selection:</strong><div style="display:inline" id="stock_date_selection"></div> </div>
                     </div><br>
 
 <form method ="POST" id="post-form" name="post-form">
@@ -213,6 +213,7 @@
                                     </div>
 
                                     <div class="chartjs-bar-wrapper mt-3">
+                                        <div id="main_analysis">main analysis</div><br>
                                       <div id="stock_analysis">Analysis</div>
                                     </div>
                                   </div>
@@ -356,19 +357,19 @@
               console.log(indexOfMaxValue)
               if (indexOfMaxValue == 0){
                 document.getElementById("sentiment_analysis").innerHTML=
-                "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiments in tweets about " + company_name.value + ""
+                "There was a general <p style='color:red; display: inline;'><strong>Negative</strong></p> sentiment in tweets about " + company_name.value + ""
               }
               else if(indexOfMaxValue == 1){
                 document.getElementById("sentiment_analysis").innerHTML= 
-                "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiments in tweets about " + company_name.value + ""
+                "There was a general  <p style='color:green; display: inline;'><strong>Positive</strong></p> sentiment in tweets about " + company_name.value + ""
               }
               else if(indexOfMaxValue == 2) {
                 document.getElementById("sentiment_analysis").innerHTML= 
-                "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiments in tweets about " + company_name.value + ""
+                "There was a general <p style='color:#B59D66; display: inline;'><strong>Neutral</strong></p> sentiment in tweets about " + company_name.value + ""
               }
               else{
                 document.getElementById("sentiment_analysis").innerHTML= 
-                "There was a general sentiments in tweets about X company were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
+                "The general sentiments in tweets about " + company_name.value + " were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
               }
             });
 
@@ -385,12 +386,21 @@
               var minimum_value = Math.min.apply(Math, _postdata)
               console.log(peak_value)
               console.log(minimum_value)
-              document.getElementById("stock_analysis").innerHTML= 
-              "There was a " 
+
+              if (rounded_percentage_change < 0){
+                document.getElementById("main_analysis").innerHTML= "<strong>The price decreased by "
+                + (-1 * rounded_percentage_change) + "% during the course of the day.</strong><br>";
+              } else{
+                document.getElementById("main_analysis").innerHTML= "<strong>The price increased by "
+                + rounded_percentage_change + "% during the course of the day.</strong><br>"
+              }
+
+              document.getElementById("stock_analysis").innerHTML=
+              "<ul> <li>There was a "
               + rounded_percentage_change.toString() + 
-              "% change in the " + company_name.value + " stock price. It started at $" + 
+              "% change in the " + company_name.value + " stock price.</li> <li>It started at $" +
               first_stockprice.toString()+ " and ended at $" + last_stockprice.toString()
-               + ". It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.";
+               + ".</li> <li>It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.</li></ul>";
 
             });
 
@@ -805,19 +815,19 @@
             console.log(indexOfMaxValue)
             if (indexOfMaxValue == 0){
               document.getElementById("sentiment_analysis").innerHTML=
-              "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiments in tweets about " + company_name.value + ""
+              "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiment in tweets about " + company_name.value + ""
             }
             else if(indexOfMaxValue == 1){
               document.getElementById("sentiment_analysis").innerHTML= 
-              "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiments in tweets about " + company_name.value + ""
+              "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiment in tweets about " + company_name.value + ""
             }
             else if(indexOfMaxValue == 2) {
               document.getElementById("sentiment_analysis").innerHTML= 
-              "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiments in tweets about " + company_name.value + ""
+              "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiment in tweets about " + company_name.value + ""
             }
             else{
               document.getElementById("sentiment_analysis").innerHTML= 
-              "There was a general sentiments in tweets about X company were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
+              "The general sentiments in tweets about " + company_name.value + " were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
             }
         });
 
@@ -832,14 +842,25 @@
             var minimum_value = Math.min.apply(Math, _data)
             console.log(peak_value)
             console.log(minimum_value)
-            document.getElementById("stock_analysis").innerHTML= 
-            "There was a " 
-            + rounded_percentage_change.toString() + 
-            "% change in the " + company_name.value + " stock price. It started at $" + 
-            first_stockprice.toString()+ " and ended at $" + last_stockprice.toString()
-              + ". It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.";
 
-          });
+
+            if (rounded_percentage_change < 0){
+                document.getElementById("main_analysis").innerHTML= "<strong>The price decreased by "
+                + (-1 * rounded_percentage_change) + "% during the course of the day.</strong><br>";
+              } else{
+                document.getElementById("main_analysis").innerHTML= "<strong>The price increased by "
+                + rounded_percentage_change + "% during the course of the day.</strong><br>"
+              }
+
+
+            document.getElementById("stock_analysis").innerHTML=
+              "<ul> <li>There was a "
+              + rounded_percentage_change.toString() +
+              "% change in the " + company_name.value + " stock price.</li> <li>It started at $" +
+              first_stockprice.toString()+ " and ended at $" + last_stockprice.toString()
+               + ".</li> <li>It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.</li></ul>";
+
+            });
                 
 
 

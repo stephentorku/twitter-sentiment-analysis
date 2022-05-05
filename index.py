@@ -29,11 +29,11 @@ def get_sentiments(input_date, company_name):
     created_at = df.loc[df['created_at'].str.contains(input_date, case=False)]
     for i in range(len(df)):
         #check for case sensitivity
+        #looping through dataframe
         if input_date in df.loc[i, "created_at"] and company_name in df.loc[i, "text"]:
             tweet_words=[]
-            # words = df.loc[i, "text"].split(' ')
-            # print("words")
-            # print(words)
+
+            #preprocessing data
             for word in df.loc[i, "text"].split(' '):
                 if word.startswith('@') and len(word) > 1:
                     word = '@user'
@@ -41,25 +41,25 @@ def get_sentiments(input_date, company_name):
                     word = "http"
                 tweet_words.append(word)
             tweet_proc = " ".join(tweet_words)
-            # print("tweet proc:")
-            # print(tweet_proc)
+
             encoded_tweet = tokenizer(tweet_proc, return_tensors='pt')
             output = model(**encoded_tweet)
             scores = output[0][0].detach().numpy()
-            # print("scores")
-            # print(scores)
+
+            #finding index of highest sentiment score
             max_score = np.max(scores)
             index_of_score = np.where(scores == max_score)
             index_of_score = index_of_score[0][0]
-            # print("index")
-            # print(index_of_score)
+
+            #increase counter depending on type of sentiment
             if index_of_score ==0:
                 negative_sentiment_count+=1
             elif index_of_score ==1:
                 neutral_sentiment_count+=1
             else:
                 positive_sentiment_count+=1
-            
+
+    #storing counts in array
     values = [negative_sentiment_count, positive_sentiment_count, neutral_sentiment_count]
     return values
 
@@ -91,22 +91,28 @@ def stockchart(symbol,date):
 def index():
     return render_template("index.html")
 
+#endpoint for receiving and calculating information
 @app.route('/get_data',  methods=['POST', 'GET'])
 def get_data():
     if request.method == "POST":
         labels=[]
         stock_list=[]
 
+        #receiving data from form
         company_name = str(request.form['company_name'])
         sentiment_date = str(request.form['sentiment_date'])
         stock_date = str(request.form['stock_date'])
 
+        #getting sentiment counts and stock values from functions using form data
         values = get_sentiments(sentiment_date, company_name)
         stock_values = stockchart(company_name, stock_date)
+
 
         for dic in stock_values:
             labels.append(dic['label'])
             stock_list.append(float(dic['value']))
+
+        #sending data as JSON to endpoint
         return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values , "minimum":min(list(stock_list)), "maximum":max(list(stock_list)) })})
 
     else:
