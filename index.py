@@ -24,9 +24,7 @@ def get_sentiments(input_date, company_name):
     positive_sentiment_count=0
     negative_sentiment_count=0
     neutral_sentiment_count=0
-    # input_date = "2022-04-09"
-    # company_name = "TSLA"
-    created_at = df.loc[df['created_at'].str.contains(input_date, case=False)]
+
     for i in range(len(df)):
         #check for case sensitivity
         #looping through dataframe
@@ -129,7 +127,7 @@ def get_data():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True, port=5000)
 
 
 #not found gives an error
