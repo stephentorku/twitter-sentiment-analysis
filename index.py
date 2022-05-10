@@ -20,7 +20,7 @@ tokenizer = AutoTokenizer.from_pretrained(roberta)
 
 
 def get_sentiments(input_date, company_name):
-    df = pd.read_csv("tweets.csv")
+    df = pd.read_csv("all-tweets.csv")
     positive_sentiment_count=0
     negative_sentiment_count=0
     neutral_sentiment_count=0
@@ -118,11 +118,11 @@ def get_data():
         labels = []
         stock_list=[]
         
-        stock_values = stockchart("AMZN", "2022-04-12")
+        stock_values = stockchart("AMZN", "2022-04-18")
         for dic in stock_values:
             labels.append(dic['label'])
             stock_list.append(float(dic['value']))
-        values = get_sentiments("2022-04-09", "Amazon")
+        values = get_sentiments("2022-04-18", "Amazon")
         return flask.jsonify({'payload':json.dumps({'data':list(reversed(stock_list)), 'labels':list(reversed(labels)), 'sentiments': values, "minimum":min(list(stock_list)), "maximum":max(list(stock_list))} )})
 
 

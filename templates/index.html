@@ -24,23 +24,20 @@
   <link rel="stylesheet" href="{{ url_for('static', filename = 'css/vertical-layout-light/style.css')}}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{{ url_for('static', filename = 'images/favicon.png')}}" />
-  
+  <style>
+    html, body {
+    background-color: #f4f5f7;
+    }
+  </style>
 </head>
 <body>
   <div class="container-scroller">
    
     <!-- partial:partials/_navbar.html -->
-    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-        <div class="me-3">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
-            <span class="icon-menu"></span>
-          </button>
-        </div>
-        
-      </div>
-      <div class="navbar-menu-wrapper d-flex align-items-top" style="height: 100px"> 
-        <ul class="navbar-nav topspace"> 
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row" style="position: absolute;">
+
+      <div class="navbar-menu-wrapper d-flex align-items-top" style="padding-left: 150px;">
+        <ul class="navbar-nav topspace">
           <li class="nav-item font-weight-semibold d-none d-lg-block ms-0" >
             <h1 class="welcome-text "> <span class="text-black fw-bold">Sentiment Analysis</span></h1>
 
@@ -50,7 +47,7 @@
 
           </li>
         </ul>
-       
+
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
           <span class="mdi mdi-menu"></span>
         </button>
@@ -62,15 +59,15 @@
       
       <!-- partial -->
       <!-- partial:partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <nav class="sidebar sidebar-offcanvas" id="sidebar" style="width: 100px">
         <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" href="index.html">
-              <i class="mdi mdi-grid-large menu-icon"></i>
-              <span class="menu-title">Dashboard</span>
-            </a>
-          </li>
-          
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link" href="index.html">-->
+<!--              <i class="mdi mdi-grid-large menu-icon"></i>-->
+<!--              <span class="menu-title">Dashboard</span>-->
+<!--            </a>-->
+<!--          </li>-->
+
         </ul>
       </nav>
       <!-- partial -->
@@ -124,13 +121,14 @@
                                       
                                       <div>
                                         <div class="dropdown">
-                                        <input type="date" name="sentiment_date" id="sentiment_date">
+                                        <input type="date" name="sentiment_date" id="sentiment_date" min="2022-04-18" max="2022-04-23">
                                         </div>
                                       </div>
                                     </div>
                                     <div class="chartjs-bar-wrapper mt-3">
                                       <canvas id="pieChart"></canvas>
                                     </div>
+                                    <strong>No. of Tweets Analyzed :</strong> <div id="no_tweets" style="display: inline"></div>
                                   </div>
                                 </div>
                               </div>
@@ -149,7 +147,7 @@
                                       </div>
                                       <div>
                                         <div class="dropdown">
-                                          <input type="date" name="stock_date" id="stock_date">
+                                          <input type="date" name="stock_date" id="stock_date" min="2022-04-18" max="2022-04-27">
                                         </div>
                                       </div>
                                     </div>
@@ -238,7 +236,7 @@
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2022. All rights reserved.</span>
           </div>
         </footer>
         <!-- partial -->
@@ -280,8 +278,8 @@
 <script>
 
     $(document).ready(function(){
-    document.getElementById("sentiment_date").defaultValue="2022-04-09"
-    document.getElementById("stock_date").defaultValue="2022-04-12"
+    document.getElementById("sentiment_date").defaultValue="2022-04-18"
+    document.getElementById("stock_date").defaultValue="2022-04-18"
 
     var company_selection = document.getElementById("company_name").value
     var tweet_date_selection = document.getElementById("sentiment_date").value
@@ -382,6 +380,13 @@
             const _postsentiments = full_data['sentiments']
             const _min = full_data['minimum']
             const _max = full_data['maximum']
+            let _no_of_tweets = 0;
+            for (let i = 0; i < _sentiments.length; i++) {
+                _no_of_tweets += _sentiments[i];
+            }
+            document.getElementById("no_tweets").innerHTML = _no_of_tweets.toString()
+
+
 
 
             //function to analyze pie chart 
@@ -840,6 +845,11 @@
         const _min = full_data['minimum']
         const _max = full_data['maximum']
         console.log(full_data)
+        let _no_of_tweets = 0;
+        for (let i = 0; i < _sentiments.length; i++) {
+            _no_of_tweets += _sentiments[i];
+        }
+        document.getElementById("no_tweets").innerHTML = _no_of_tweets.toString()
 
 
         //function to analyze pie chart 
