@@ -2,1312 +2,1322 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Twitter Sentiment Analysis </title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <!-- plugins:css -->
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/feather/feather.css')}}"> 
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/mdi/css/materialdesignicons.min.css')}}">
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/ti-icons/css/themify-icons.css')}}">
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/typicons/typicons.css')}}">
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/simple-line-icons/css/simple-line-icons.css')}}">
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/css/vendor.bundle.base.css')}}">
-  <!-- endinject -->
-  <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/datatables.net-bs4/dataTables.bootstrap4.css')}}">
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'js/select.dataTables.min.css')}}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/vertical-layout-light/style.css')}}">
-  <!-- endinject -->
-  <link rel="shortcut icon" href="{{ url_for('static', filename = 'images/favicon.png')}}" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Twitter Sentiment Analysis </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/feather/feather.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/mdi/css/materialdesignicons.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/ti-icons/css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/typicons/typicons.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/simple-line-icons/css/simple-line-icons.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/css/vendor.bundle.base.css')}}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/datatables.net-bs4/dataTables.bootstrap4.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'js/select.dataTables.min.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/vertical-layout-light/style.css')}}">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename = 'images/favicon.png')}}" />
 
-  <style>
-    html, body {
-    background-color: #f4f5f7;
-    }
-  </style>
+    <style>
+        html,
+        body {
+            background-color: #f4f5f7;
+        }
+    </style>
 
 </head>
+
 <body>
-  <div class="container-scroller">
 
-    <!-- partial:partials/_navbar.html -->
-    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row" style="position: absolute;">
-<!--      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">-->
-<!--        <div class="me-3">-->
-<!--          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">-->
-<!--            <span class="icon-menu"></span>-->
-<!--          </button>-->
-<!--        </div>-->
+    <div id="loader" style=" display:none; margin: 0 auto; margin-top: 20%; z-index:1000;">
+        <div class="loader" style="margin: 0 auto;">
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <span> Loading ...</span>
+        </div>
+    </div>
 
-<!--      </div>-->
-      <div class="navbar-menu-wrapper d-flex align-items-top" style="padding-left: 150px;">
-        <ul class="navbar-nav topspace">
-          <li class="nav-item font-weight-semibold d-none d-lg-block ms-0" >
-            <h1 class="welcome-text "> <span class="text-black fw-bold">Sentiment Analysis</span></h1>
 
-            <div style="width:70%"><h3 class="welcome-sub-text">Through natural language processing, we compare sentiments from tweets to
-              stock prices within a given day to find out if there is a correlation between sentiments on twitter and stock
-                prices. Twitter sentiments can be selected from 18th April, 2022 - 23rd April, 2022.</h3></div>
 
-          </li>
-        </ul>
+    <div id="load">
 
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+        <div class="container-scroller">
+
+            <!-- partial:partials/_navbar.html -->
+            <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row" style="position: absolute;">
+                <!--      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">-->
+                <!--        <div class="me-3">-->
+                <!--          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">-->
+                <!--            <span class="icon-menu"></span>-->
+                <!--          </button>-->
+                <!--        </div>-->
+
+                <!--      </div>-->
+                <div class="navbar-menu-wrapper d-flex align-items-top" style="padding-left: 150px;">
+                    <ul class="navbar-nav topspace">
+                        <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
+                            <h1 class="welcome-text "> <span class="text-black fw-bold">Sentiment Analysis</span></h1>
+
+                            <div style="width:70%">
+                                <h3 class="welcome-sub-text">Through natural language processing, we compare sentiments from tweets to stock prices within a given day to find out if there is a correlation between sentiments on twitter and stock prices. Twitter sentiments can be selected
+                                    from 18th April, 2022 - 23rd April, 2022.</h3>
+                            </div>
+
+                        </li>
+                    </ul>
+
+                    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
           <span class="mdi mdi-menu"></span>
         </button>
-      </div>
-    </nav>
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
+                </div>
+            </nav>
+            <!-- partial -->
+            <div class="container-fluid page-body-wrapper">
 
 
-      <!-- partial -->
-      <!-- partial:partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar" style="width: 100px">
-        <ul class="nav">
-<!--          <li class="nav-item">-->
-<!--            <a class="nav-link" href="index.html">-->
-<!--              <i class="mdi mdi-grid-large menu-icon"></i>-->
-<!--              <span class="menu-title">Dashboard</span>-->
-<!--            </a>-->
-<!--          </li>-->
+                <!-- partial -->
+                <!-- partial:partials/_sidebar.html -->
+                <nav class="sidebar sidebar-offcanvas" id="sidebar" style="width: 100px">
+                    <ul class="nav">
+                        <!--          <li class="nav-item">-->
+                        <!--            <a class="nav-link" href="index.html">-->
+                        <!--              <i class="mdi mdi-grid-large menu-icon"></i>-->
+                        <!--              <span class="menu-title">Dashboard</span>-->
+                        <!--            </a>-->
+                        <!--          </li>-->
 
-        </ul>
-      </nav>
-      <!-- partial -->
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="home-tab">
-                <div class="tab-content tab-content-basic">
-                  <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
+                    </ul>
+                </nav>
+                <!-- partial -->
+                <div class="main-panel">
 
-<form method ="POST" id="post-form" name="post-form">
-    <div style="margin-left: 10px;">
-                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                      <li class="nav-item" role="presentation">
+                    <div class="content-wrapper">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="home-tab">
+                                    <div class="tab-content tab-content-basic">
+                                        <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
 
-<select name="company_name" id="company_name">
+                                            <form method="POST" id="post-form" name="post-form">
+                                                <div style="margin-left: 10px;">
+                                                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                                        <li class="nav-item" role="presentation">
+
+                                                            <select name="company_name" id="company_name">
     <option value="AMZN">Amazon</option>
     <option value="TSLA">Tesla</option>
     <option value="GOOG">Google</option>
 </select>
-<!--<input type="text" name="company_name" id = "company_name" placeholder = "Name of Company" >-->
+                                                            <!--<input type="text" name="company_name" id = "company_name" placeholder = "Name of Company" >-->
 
 
-                      </li>
-                      <li class="nav-item" role="presentation">
-                        <input class="nav-link active" type="submit" value="Analyze">
-                      </li>
-                    </ul>
-        </div>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
+                                                            <input class="nav-link active" type="submit" value="Analyze">
+                                                        </li>
+                                                    </ul>
+                                                </div>
 
-  <div>
-                      <div class="top_info_display"><strong>Company Selection:</strong> <div style="display:inline" id="company_selection"></div> </div>
-                      <div class="top_info_display"><strong>Tweet Date Selection:</strong> <div style="display:inline" id="tweet_date_selection"></div> </div>
-                      <div class="top_info_display"><strong>Stock Date Selection:</strong><div style="display:inline" id="stock_date_selection"></div> </div>
-                    </div><br>
+                                                <div>
+                                                    <div class="top_info_display"><strong>Company Selection:</strong>
+                                                        <div style="display:inline" id="company_selection"></div>
+                                                    </div>
+                                                    <div class="top_info_display"><strong>Tweet Date Selection:</strong>
+                                                        <div style="display:inline" id="tweet_date_selection"></div>
+                                                    </div>
+                                                    <div class="top_info_display"><strong>Stock Date Selection:</strong>
+                                                        <div style="display:inline" id="stock_date_selection"></div>
+                                                    </div>
+                                                </div><br>
 
 
-                    <div class="tab-content" id="pills-tabContent">
-                      <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <div class="row">
+                                                <div class="tab-content" id="pills-tabContent">
+                                                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                                                        <div class="row">
 
-                          <div class="col-lg-6 d-flex flex-column">
-                            <div class="row flex-grow">
-                              <div class="col-12 grid-margin stretch-card">
-                                <div class="card card-rounded">
-                                  <div class="card-body">
-                                    <div class="d-sm-flex justify-content-between align-items-start">
-                                      <div>
-                                        <h4 class="card-title card-title-dash">Sentiment </h4>
-                                      </div>
+                                                            <div class="col-lg-6 d-flex flex-column">
+                                                                <div class="row flex-grow">
+                                                                    <div class="col-12 grid-margin stretch-card">
+                                                                        <div class="card card-rounded">
+                                                                            <div class="card-body">
+                                                                                <div class="d-sm-flex justify-content-between align-items-start">
+                                                                                    <div>
+                                                                                        <h4 class="card-title card-title-dash">Sentiment </h4>
+                                                                                    </div>
 
-                                      <div>
-                                        <div class="dropdown">
-                                        <input type="date" name="sentiment_date" id="sentiment_date" min="2022-04-18" max="2022-04-23">
+                                                                                    <div>
+                                                                                        <div class="dropdown">
+                                                                                            <input type="date" name="sentiment_date" id="sentiment_date" min="2022-04-18" max="2022-04-23">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="chartjs-bar-wrapper mt-3">
+                                                                                    <canvas id="pieChart"></canvas>
+                                                                                </div>
+                                                                                <div style="text-align:center"><strong>Negative Count:</strong>
+                                                                                    <div id="negative_count" style="display: inline"></div> , &nbsp; <strong>Positive Count:</strong>
+                                                                                    <div id="positive_count" style="display: inline"></div>, &nbsp; <strong>Neutral Count:</strong>
+                                                                                    <div id="neutral_count" style="display: inline"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="col-lg-6 d-flex flex-column">
+                                                                <div class="row flex-grow">
+                                                                    <div class="col-12 grid-margin stretch-card">
+                                                                        <div class="card card-rounded">
+                                                                            <div class="card-body">
+                                                                                <div class="d-sm-flex justify-content-between align-items-start">
+                                                                                    <div>
+                                                                                        <h4 class="card-title card-title-dash">Stock </h4>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div class="dropdown">
+                                                                                            <input type="date" name="stock_date" id="stock_date" min="2022-04-18" max="2022-04-26">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="chartjs-bar-wrapper mt-3">
+                                                                                    <canvas id="lineChart"></canvas>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                                <h2>Analysis of Graphs</h2>
+                                                <div class="tab-content" id="pills-tabContent">
+                                                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                                                        <div class="row">
+
+
+
+                                                            <div class="col-lg-6 d-flex flex-column">
+                                                                <div class="row flex-grow">
+                                                                    <div class="col-12 grid-margin stretch-card">
+                                                                        <div class="card card-rounded">
+                                                                            <div class="card-body">
+                                                                                <div class="d-sm-flex justify-content-between align-items-start">
+                                                                                    <div>
+                                                                                        <h4 class="card-title card-title-dash">Sentiment Graph Analysis</h4>
+                                                                                    </div>
+
+                                                                                    <div>
+                                                                                        <div class="dropdown">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="chartjs-bar-wrapper mt-3">
+                                                                                    <div id="sentiment_analysis">Analysis</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="col-lg-6 d-flex flex-column">
+                                                                <div class="row flex-grow">
+                                                                    <div class="col-12 grid-margin stretch-card">
+                                                                        <div class="card card-rounded">
+                                                                            <div class="card-body">
+                                                                                <div class="d-sm-flex justify-content-between align-items-start">
+                                                                                    <div>
+                                                                                        <h4 class="card-title card-title-dash">Stock Graph Analysis </h4>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div class="dropdown">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="chartjs-bar-wrapper mt-3">
+                                                                                    <div id="main_analysis">main analysis</div><br>
+                                                                                    <div id="stock_analysis">Analysis</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                         </div>
-                                      </div>
                                     </div>
-                                    <div class="chartjs-bar-wrapper mt-3">
-                                      <canvas id="pieChart"></canvas>
-                                    </div>
-                                    <div style="text-align:center"><strong>Negative Count:</strong> <div id="negative_count" style="display: inline"></div> , &nbsp; <strong>Positive Count:</strong> <div id="positive_count" style="display: inline"></div>, &nbsp; <strong>Neutral Count:</strong> <div id="neutral_count" style="display: inline"></div> </div>
-                                  </div>
                                 </div>
-                              </div>
                             </div>
-                          </div>
-
-
-                          <div class="col-lg-6 d-flex flex-column">
-                            <div class="row flex-grow">
-                              <div class="col-12 grid-margin stretch-card">
-                                <div class="card card-rounded">
-                                  <div class="card-body">
-                                    <div class="d-sm-flex justify-content-between align-items-start">
-                                      <div>
-                                        <h4 class="card-title card-title-dash">Stock </h4>
-                                      </div>
-                                      <div>
-                                        <div class="dropdown">
-                                          <input type="date" name="stock_date" id="stock_date" min="2022-04-18" max="2022-04-26">
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <div class="chartjs-bar-wrapper mt-3">
-                                      <canvas id="lineChart"></canvas>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
                         </div>
-                      </div>
-
-
-                    </div>
-                    <h2>Analysis of Graphs</h2>
-                    <div class="tab-content" id="pills-tabContent">
-                      <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <div class="row">
-
-                          <div class="col-lg-6 d-flex flex-column">
-                            <div class="row flex-grow">
-                              <div class="col-12 grid-margin stretch-card">
-                                <div class="card card-rounded">
-                                  <div class="card-body">
-                                    <div class="d-sm-flex justify-content-between align-items-start">
-                                      <div>
-                                        <h4 class="card-title card-title-dash">Sentiment Graph Analysis</h4>
-                                      </div>
-
-                                      <div>
-                                        <div class="dropdown">
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="chartjs-bar-wrapper mt-3">
-                                      <div id="sentiment_analysis">Analysis</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                        </form>
+                        <!-- content-wrapper ends -->
+                        <!-- partial:partials/_footer.html -->
+                        <footer class="footer">
+                            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2022. All rights reserved.</span>
                             </div>
-                          </div>
-
-
-                          <div class="col-lg-6 d-flex flex-column">
-                            <div class="row flex-grow">
-                              <div class="col-12 grid-margin stretch-card">
-                                <div class="card card-rounded">
-                                  <div class="card-body">
-                                    <div class="d-sm-flex justify-content-between align-items-start">
-                                      <div>
-                                        <h4 class="card-title card-title-dash">Stock Graph Analysis </h4>
-                                      </div>
-                                      <div>
-                                        <div class="dropdown">
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <div class="chartjs-bar-wrapper mt-3">
-                                        <div id="main_analysis">main analysis</div><br>
-                                      <div id="stock_analysis">Analysis</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-
+                        </footer>
+                        <!-- partial -->
                     </div>
-
-                  </div>
+                    <!-- main-panel ends -->
                 </div>
-              </div>
+                <!-- page-body-wrapper ends -->
             </div>
-          </div>
+            <!-- container-scroller -->
+
+            <!-- Bootstrap:js -->
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+            <!-- plugins:js -->
+            <script src="{{ url_for('static', filename = 'vendors/js/vendor.bundle.base.js')}}"></script>
+            <!-- endinject -->
+            <!-- Plugin js for this page -->
+            <script src="{{ url_for('static', filename = 'vendors/chart.js/Chart.min.js')}}"></script>
+            <script src="{{ url_for('static', filename = 'vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
+            <script src="{{ url_for('static', filename = 'vendors/progressbar.js/progressbar.min.js')}}"></script>
+
+            <!-- End plugin js for this page -->
+            <!-- inject:js -->
+            <script src="{{ url_for('static', filename = 'js/off-canvas.js')}}"></script>
+            <script src="{{ url_for('static', filename = 'js/hoverable-collapse.js')}}"></script>
+            <script src="{{ url_for('static', filename = 'js/template.js')}}"></script>
+            <script src="{{ url_for('static', filename = 'js/settings.js')}}"></script>
+            <script src="{{ url_for('static', filename = 'js/todolist.js')}}"></script>
+            <!-- endinject -->
+            <!-- Custom js for this page-->
+            <script src="{{ url_for('static', filename = 'js/jquery.cookie.js')}}" type="text/javascript"></script>
+            <script src="{{ url_for('static', filename = 'js/dashboard.js')}}"></script>
+            <script src="{{ url_for('static', filename = 'js/Chart.roundedBarCharts.js')}}"></script>
+
+            <!-- End custom js for this page-->
+
+            <!--    <script>-->
+
+            <!--      var loader =document.getElementById("loader");-->
+
+            <!--      window.addEventListener("load", function(){-->
+            <!--       document.getElementsByTagName("BODY")[0].style.display = "none";-->
+            <!--      })-->
+            <!--    </script>-->
+
+            <script>
+                $(document).ready(function() {
+                    document.getElementById("sentiment_date").defaultValue = "2022-04-18"
+                    document.getElementById("stock_date").defaultValue = "2022-04-18"
+
+                    var company_selection = document.getElementById("company_name").value
+                    var tweet_date_selection = document.getElementById("sentiment_date").value
+                    var stock_date_selection = document.getElementById("stock_date").value
+
+                    var tweet_date = new Date(Date.parse(tweet_date_selection));
+                    var stock_date = new Date(Date.parse(stock_date_selection));
+
+                    var formatted_tweet_date_selection = tweet_date.toUTCString()
+                    var formatted_stock_date_selection = stock_date.toUTCString()
+
+
+                    document.getElementById("company_selection").innerHTML = company_selection
+                    document.getElementById("tweet_date_selection").innerHTML = formatted_tweet_date_selection
+                    document.getElementById("stock_date_selection").innerHTML = formatted_stock_date_selection
+
+                    document.getElementById('sentiment_date').onchange = function() {
+
+                        var tweet_date_selection = document.getElementById("sentiment_date")
+                        var stock_date_selection = document.getElementById("stock_date")
+
+                        stock_date_selection.setAttribute('value', this.value);
+                        stock_date_selection.setAttribute('min', this.value);
+                        //document.getElementById("stock_date_selection").innerHTML= this.value
+
+                        var date_array = stock_date_selection.value.split("-")
+                        var day = parseInt(date_array[2]) + 3
+                        if (day < 10)
+                            day = '0' + day.toString();
+                        var maxDate = date_array[0] + '-' + date_array[1] + '-' + day
+
+                        stock_date_selection.setAttribute('max', maxDate);
+
+                        var tweet_date = new Date(Date.parse(tweet_date_selection.value));
+                        var formatted_tweet_date_selection = tweet_date.toUTCString()
+
+                        document.getElementById("tweet_date_selection").innerHTML = formatted_tweet_date_selection
+                        document.getElementById("stock_date_selection").innerHTML = ""
+
+
+                    };
+
+
+
+                    document.getElementById('stock_date').onchange = function() {
+
+
+                        var stock_date_selection = document.getElementById("stock_date")
+                        var stock_date = new Date(Date.parse(stock_date_selection.value));
+                        var formatted_stock_date_selection = stock_date.toUTCString()
+
+                        document.getElementById("stock_date_selection").innerHTML = formatted_stock_date_selection
+                    }
+
+                    document.getElementById('company_name').onchange = function() {
+
+                        var company_selection = document.getElementById("company_name").value
+                        document.getElementById("company_selection").innerHTML = company_selection
+
+
+                    }
+
+
+                    //function to restrict weekends for stock graph date picker
+                    $(function() {
+                        const stock_picker = document.getElementById('stock_date');
+                        stock_picker.addEventListener('input', function(e) {
+                            var day = new Date(this.value).getUTCDay();
+                            if ([6, 0].includes(day)) {
+                                e.preventDefault();
+                                this.value = document.getElementById('sentiment_date').value;
+                                alert('Weekends not allowed');
+                            }
+                        });
+                    });
+
+
+                    //POST ajax to  send data to backend after form is submitted
+                    $("#post-form").submit(function(e) {
+                        $("#load").hide()
+                        $("#loader").show();
+                        e.preventDefault();
+                        console.log("post")
+
+                        $.ajax({
+                            type: 'POST',
+                            url: "/get_data",
+                            data: {
+                                company_name: $('#company_name').val(),
+                                sentiment_date: $('#sentiment_date').val(),
+                                stock_date: $('#stock_date').val(),
+                            },
+                            success: function(response) {
+                                //printing data in console
+                                console.log("success post");
+                                console.log($('#company_name').val());
+                                $("#load").show()
+                                $("#loader").hide()
+
+
+                                //response from URL
+                                full_data = JSON.parse(response.payload);
+                                const _postdata = full_data['data'];
+                                const _postlabels = full_data['labels'];
+                                const _postsentiments = full_data['sentiments']
+                                const _min = full_data['minimum']
+                                const _max = full_data['maximum']
+
+                                let negative_count = _postsentiments[0]
+                                let positive_count = _postsentiments[1]
+                                let neutral_count = _postsentiments[2]
+
+                                document.getElementById("negative_count").innerHTML = negative_count
+                                document.getElementById("positive_count").innerHTML = positive_count
+                                document.getElementById("neutral_count").innerHTML = neutral_count
+
+
+
+                                //function to analyze pie chart
+                                $(function() {
+
+
+                                    //finding index of maximum number of sentiments and displaying an analysis based on output
+                                    var indexOfMaxValue = _postsentiments.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+                                    console.log(indexOfMaxValue)
+                                    if (indexOfMaxValue == 0) {
+                                        document.getElementById("sentiment_analysis").innerHTML =
+                                            "There was a general <p style='color:red; display: inline;'><strong>Negative</strong></p> sentiment in tweets about " + company_name.value + ""
+                                    } else if (indexOfMaxValue == 1) {
+                                        document.getElementById("sentiment_analysis").innerHTML =
+                                            "There was a general  <p style='color:green; display: inline;'><strong>Positive</strong></p> sentiment in tweets about " + company_name.value + ""
+                                    } else if (indexOfMaxValue == 2) {
+                                        document.getElementById("sentiment_analysis").innerHTML =
+                                            "There was a general <p style='color:#B59D66; display: inline;'><strong>Neutral</strong></p> sentiment in tweets about " + company_name.value + ""
+                                    } else {
+                                        document.getElementById("sentiment_analysis").innerHTML =
+                                            "The general sentiments in tweets about " + company_name.value + " were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
+                                    }
+                                });
+
+
+                                //function to analyze stock graph
+                                $(function() {
+                                    var first_stockprice = _postdata[0];
+                                    var last_stockprice = _postdata[_postdata.length - 1];
+                                    //finding percentage change in price
+                                    var percentage_change = ((last_stockprice / first_stockprice) * 100) - 100
+                                    var rounded_percentage_change = Math.round((percentage_change + Number.EPSILON) * 100) / 100
+                                        //finding peak and trough values
+                                    var peak_value = Math.max.apply(Math, _postdata)
+                                    var minimum_value = Math.min.apply(Math, _postdata)
+                                    console.log(peak_value)
+                                    console.log(minimum_value)
+
+                                    if (rounded_percentage_change < 0) {
+                                        document.getElementById("main_analysis").innerHTML = "<strong>The price decreased by " +
+                                            (-1 * rounded_percentage_change) + "% during the course of the day.</strong><br>";
+                                    } else {
+                                        document.getElementById("main_analysis").innerHTML = "<strong>The price increased by " +
+                                            rounded_percentage_change + "% during the course of the day.</strong><br>"
+                                    }
+
+                                    document.getElementById("stock_analysis").innerHTML =
+                                        "<ul> <li>There was a " +
+                                        rounded_percentage_change.toString() +
+                                        "% change in the " + company_name.value + " stock price.</li> <li>It started at $" +
+                                        first_stockprice.toString() + " and ended at $" + last_stockprice.toString() +
+                                        ".</li> <li>It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.</li></ul>";
+
+                                });
+
+                                console.log("in post")
+
+                                console.log(full_data)
+
+
+                                //here
+                                $(function() {
+                                    /* ChartJS
+                                     * -------
+                                     * Data and config for chartjs
+                                     */
+                                    console.log("sentiments:")
+                                    console.log(_postsentiments)
+                                    'use strict';
+                                    var data = {
+                                        labels: _postlabels,
+                                        //labels: [{% for label in labels %} {{label}},{% endfor %}],
+                                        //labels: {{labels}},
+                                        datasets: [{
+                                            label: 'Stock Prices',
+                                            data: _postdata,
+
+                                            //data: [{% for value in stock_list %} {{value}},{% endfor %}],
+                                            //data: {{stock_list}},
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255, 159, 64, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255,99,132,1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                            borderWidth: 1,
+                                            fill: false
+                                        }, ]
+                                    };
+                                    var multiLineData = {
+                                        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                                        datasets: [{
+                                            label: 'Dataset 1',
+                                            data: [12, 19, 3, 5, 2, 3],
+                                            borderColor: [
+                                                '#587ce4'
+                                            ],
+                                            borderWidth: 2,
+                                            fill: false
+                                        }, {
+                                            label: 'Dataset 2',
+                                            data: [5, 23, 7, 12, 42, 23],
+                                            borderColor: [
+                                                '#ede190'
+                                            ],
+                                            borderWidth: 2,
+                                            fill: false
+                                        }, {
+                                            label: 'Dataset 3',
+                                            data: [15, 10, 21, 32, 12, 33],
+                                            borderColor: [
+                                                '#f44252'
+                                            ],
+                                            borderWidth: 2,
+                                            fill: false
+                                        }]
+                                    };
+                                    var options = {
+                                        scales: {
+                                            yAxes: [{
+                                                display: true,
+                                                ticks: {
+                                                    beginAtZero: true,
+                                                    min: Math.floor(_min),
+                                                    max: Math.ceil(_max)
+                                                }
+                                            }]
+                                        },
+                                        legend: {
+                                            display: false
+                                        },
+                                        elements: {
+                                            point: {
+                                                radius: 0
+                                            }
+                                        }
+
+                                    };
+                                    var doughnutPieData = {
+                                        datasets: [{
+                                            data: _postsentiments,
+                                            //data: [{% for val in vals %} {{val}},{% endfor %}],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.5)',
+                                                'rgba(54, 162, 235, 0.5)',
+                                                'rgba(255, 206, 86, 0.5)',
+                                                'rgba(75, 192, 192, 0.5)',
+                                                'rgba(153, 102, 255, 0.5)',
+                                                'rgba(255, 159, 64, 0.5)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255,99,132,1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                        }],
+
+                                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                                        labels: [
+                                            'Negative',
+                                            'Positive',
+                                            'Neutral',
+                                        ]
+                                    };
+                                    var doughnutPieOptions = {
+                                        responsive: true,
+                                        animation: {
+                                            animateScale: true,
+                                            animateRotate: true
+                                        }
+                                    };
+                                    var areaData = {
+                                        labels: ["2013", "2014", "2015", "2016", "2017"],
+                                        datasets: [{
+                                            label: '# of Votes',
+                                            data: [12, 19, 3, 5, 2, 3],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255, 159, 64, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255,99,132,1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                            borderWidth: 1,
+                                            fill: true, // 3: no fill
+                                        }]
+                                    };
+
+                                    var areaOptions = {
+                                        plugins: {
+                                            filler: {
+                                                propagate: true
+                                            }
+                                        }
+                                    }
+
+                                    var multiAreaData = {
+                                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                        datasets: [{
+                                            label: 'Facebook',
+                                            data: [8, 11, 13, 15, 12, 13, 16, 15, 13, 19, 11, 14],
+                                            borderColor: ['rgba(255, 99, 132, 0.5)'],
+                                            backgroundColor: ['rgba(255, 99, 132, 0.5)'],
+                                            borderWidth: 1,
+                                            fill: true
+                                        }, {
+                                            label: 'Twitter',
+                                            data: [7, 17, 12, 16, 14, 18, 16, 12, 15, 11, 13, 9],
+                                            borderColor: ['rgba(54, 162, 235, 0.5)'],
+                                            backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+                                            borderWidth: 1,
+                                            fill: true
+                                        }, {
+                                            label: 'Linkedin',
+                                            data: [6, 14, 16, 20, 12, 18, 15, 12, 17, 19, 15, 11],
+                                            borderColor: ['rgba(255, 206, 86, 0.5)'],
+                                            backgroundColor: ['rgba(255, 206, 86, 0.5)'],
+                                            borderWidth: 1,
+                                            fill: true
+                                        }]
+                                    };
+
+                                    var multiAreaOptions = {
+                                        plugins: {
+                                            filler: {
+                                                propagate: true
+                                            }
+                                        },
+                                        elements: {
+                                            point: {
+                                                radius: 0
+                                            }
+                                        },
+                                        scales: {
+                                            xAxes: [{
+                                                gridLines: {
+                                                    display: false
+                                                }
+                                            }],
+                                            yAxes: [{
+                                                gridLines: {
+                                                    display: false
+                                                }
+                                            }]
+                                        }
+                                    }
+
+                                    var scatterChartData = {
+                                        datasets: [{
+                                            label: 'First Dataset',
+                                            data: [{
+                                                x: -10,
+                                                y: 0
+                                            }, {
+                                                x: 0,
+                                                y: 3
+                                            }, {
+                                                x: -25,
+                                                y: 5
+                                            }, {
+                                                x: 40,
+                                                y: 5
+                                            }],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255,99,132,1)'
+                                            ],
+                                            borderWidth: 1
+                                        }, {
+                                            label: 'Second Dataset',
+                                            data: [{
+                                                x: 10,
+                                                y: 5
+                                            }, {
+                                                x: 20,
+                                                y: -30
+                                            }, {
+                                                x: -25,
+                                                y: 15
+                                            }, {
+                                                x: -10,
+                                                y: 5
+                                            }],
+                                            backgroundColor: [
+                                                'rgba(54, 162, 235, 0.2)',
+                                            ],
+                                            borderColor: [
+                                                'rgba(54, 162, 235, 1)',
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    }
+
+                                    var scatterChartOptions = {
+                                            scales: {
+                                                xAxes: [{
+                                                    type: 'linear',
+                                                    position: 'bottom'
+                                                }]
+                                            }
+                                        }
+                                        // Get context with jQuery - using jQuery's .get() method.
+                                    if ($("#barChart").length) {
+                                        var barChartCanvas = $("#barChart").get(0).getContext("2d");
+                                        // This will get the first returned node in the jQuery collection.
+                                        var barChart = new Chart(barChartCanvas, {
+                                            type: 'bar',
+                                            data: data,
+                                            options: options
+                                        });
+                                    }
+
+                                    if ($("#lineChart").length) {
+                                        var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
+                                        var lineChart = new Chart(lineChartCanvas, {
+                                            type: 'line',
+                                            data: data,
+                                            options: options
+                                        });
+                                    }
+
+                                    if ($("#linechart-multi").length) {
+                                        var multiLineCanvas = $("#linechart-multi").get(0).getContext("2d");
+                                        var lineChart = new Chart(multiLineCanvas, {
+                                            type: 'line',
+                                            data: multiLineData,
+                                            options: options
+                                        });
+                                    }
+
+                                    if ($("#areachart-multi").length) {
+                                        var multiAreaCanvas = $("#areachart-multi").get(0).getContext("2d");
+                                        var multiAreaChart = new Chart(multiAreaCanvas, {
+                                            type: 'line',
+                                            data: multiAreaData,
+                                            options: multiAreaOptions
+                                        });
+                                    }
+
+                                    if ($("#doughnutChart").length) {
+                                        var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
+                                        var doughnutChart = new Chart(doughnutChartCanvas, {
+                                            type: 'doughnut',
+                                            data: doughnutPieData,
+                                            options: doughnutPieOptions
+                                        });
+                                    }
+
+                                    if ($("#pieChart").length) {
+                                        var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+                                        var pieChart = new Chart(pieChartCanvas, {
+                                            type: 'pie',
+                                            data: doughnutPieData,
+                                            options: doughnutPieOptions
+                                        });
+                                    }
+
+                                    if ($("#pieChart2").length) {
+                                        var pieChartCanvas = $("#pieChart2").get(0).getContext("2d");
+                                        var pieChart = new Chart(pieChartCanvas, {
+                                            type: 'pie',
+                                            data: doughnutPieData,
+                                            options: doughnutPieOptions
+                                        });
+                                    }
+
+                                    if ($("#areaChart").length) {
+                                        var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
+                                        var areaChart = new Chart(areaChartCanvas, {
+                                            type: 'line',
+                                            data: areaData,
+                                            options: areaOptions
+                                        });
+                                    }
+
+                                    if ($("#scatterChart").length) {
+                                        var scatterChartCanvas = $("#scatterChart").get(0).getContext("2d");
+                                        var scatterChart = new Chart(scatterChartCanvas, {
+                                            type: 'scatter',
+                                            data: scatterChartData,
+                                            options: scatterChartOptions
+                                        });
+                                    }
+
+                                    if ($("#browserTrafficChart").length) {
+                                        var doughnutChartCanvas = $("#browserTrafficChart").get(0).getContext("2d");
+                                        var doughnutChart = new Chart(doughnutChartCanvas, {
+                                            type: 'doughnut',
+                                            data: browserTrafficData,
+                                            options: doughnutPieOptions
+                                        });
+                                    }
+                                });
+
+
+                                //alert(data)
+                            }
+                        });
+                        //document.getElementById('company_name').value = ''
+                    });
+                    ajaxCall()
+                    function ajaxCall() {
+                    $("#load").hide()
+                    $("#loader").show();
+                        $.ajax({
+                            url: "/get_data",
+                            type: "GET",
+                            data: {
+                                vals: ''
+                            },
+                            success: function(response) {
+
+                                full_data = JSON.parse(response.payload);
+                                const _data = full_data['data'];
+                                const _labels = full_data['labels'];
+                                const _sentiments = full_data['sentiments']
+                                const _min = full_data['minimum']
+                                const _max = full_data['maximum']
+                                console.log(full_data)
+                                $("#load").show()
+                                $("#loader").hide()
+                                let negative_count = _sentiments[0]
+                                let positive_count = _sentiments[1]
+                                let neutral_count = _sentiments[2]
+
+                                document.getElementById("negative_count").innerHTML = negative_count
+                                document.getElementById("positive_count").innerHTML = positive_count
+                                document.getElementById("neutral_count").innerHTML = neutral_count
+
+
+
+
+                                //function to analyze pie chart
+                                $(function() {
+
+
+                                    //finding index of maximum number of sentiments and displaying an analysis based on output
+                                    var indexOfMaxValue = _sentiments.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+                                    console.log(indexOfMaxValue)
+                                    if (indexOfMaxValue == 0) {
+                                        document.getElementById("sentiment_analysis").innerHTML =
+                                            "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiment in tweets about " + company_name.value + ""
+                                    } else if (indexOfMaxValue == 1) {
+                                        document.getElementById("sentiment_analysis").innerHTML =
+                                            "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiment in tweets about " + company_name.value + ""
+                                    } else if (indexOfMaxValue == 2) {
+                                        document.getElementById("sentiment_analysis").innerHTML =
+                                            "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiment in tweets about " + company_name.value + ""
+                                    } else {
+                                        document.getElementById("sentiment_analysis").innerHTML =
+                                            "The general sentiments in tweets about " + company_name.value + " were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
+                                    }
+                                });
+
+                                $(function() {
+                                    var first_stockprice = _data[0];
+                                    var last_stockprice = _data[_data.length - 1];
+                                    //finding percentage change in price
+                                    var percentage_change = ((last_stockprice / first_stockprice) * 100) - 100
+                                    var rounded_percentage_change = Math.round((percentage_change + Number.EPSILON) * 100) / 100
+                                        //finding peak and trough values
+                                    var peak_value = Math.max.apply(Math, _data)
+                                    var minimum_value = Math.min.apply(Math, _data)
+                                    console.log(peak_value)
+                                    console.log(minimum_value)
+
+
+                                    if (rounded_percentage_change < 0) {
+                                        document.getElementById("main_analysis").innerHTML = "<strong>The price decreased by " +
+                                            (-1 * rounded_percentage_change) + "% during the course of the day.</strong><br>";
+                                    } else {
+                                        document.getElementById("main_analysis").innerHTML = "<strong>The price increased by " +
+                                            rounded_percentage_change + "% during the course of the day.</strong><br>"
+                                    }
+
+
+                                    document.getElementById("stock_analysis").innerHTML =
+                                        "<ul> <li>There was a " +
+                                        rounded_percentage_change.toString() +
+                                        "% change in the " + company_name.value + " stock price.</li> <li>It started at $" +
+                                        first_stockprice.toString() + " and ended at $" + last_stockprice.toString() +
+                                        ".</li> <li>It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.</li></ul>";
+
+                                });
+
+
+
+                                $(function() {
+                                    /* ChartJS
+                                     * -------
+                                     * Data and config for chartjs
+                                     */
+                                    console.log("sentiments:")
+                                    console.log(_sentiments)
+                                    'use strict';
+                                    var data = {
+                                        labels: _labels,
+                                        //labels: [{% for label in labels %} {{label}},{% endfor %}],
+                                        //labels: {{labels}},
+                                        datasets: [{
+                                            label: 'Stock Prices',
+                                            data: _data,
+                                            //data: [{% for value in stock_list %} {{value}},{% endfor %}],
+                                            //data: {{stock_list}},
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255, 159, 64, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255,99,132,1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                            borderWidth: 1,
+                                            fill: false
+                                        }]
+                                    };
+                                    var multiLineData = {
+                                        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                                        datasets: [{
+                                            label: 'Dataset 1',
+                                            data: [12, 19, 3, 5, 2, 3],
+                                            borderColor: [
+                                                '#587ce4'
+                                            ],
+                                            borderWidth: 2,
+                                            fill: false
+                                        }, {
+                                            label: 'Dataset 2',
+                                            data: [5, 23, 7, 12, 42, 23],
+                                            borderColor: [
+                                                '#ede190'
+                                            ],
+                                            borderWidth: 2,
+                                            fill: false
+                                        }, {
+                                            label: 'Dataset 3',
+                                            data: [15, 10, 21, 32, 12, 33],
+                                            borderColor: [
+                                                '#f44252'
+                                            ],
+                                            borderWidth: 2,
+                                            fill: false
+                                        }]
+                                    };
+                                    var options = {
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: true,
+                                                    stepSize: 20,
+                                                    min: Math.floor(_min),
+                                                    max: Math.ceil(_max)
+                                                }
+                                            }]
+                                        },
+                                        legend: {
+                                            display: false
+                                        },
+                                        elements: {
+                                            point: {
+                                                radius: 0
+                                            }
+                                        }
+
+                                    };
+                                    var doughnutPieData = {
+                                        datasets: [{
+                                            data: _sentiments,
+                                            //data: [{% for val in vals %} {{val}},{% endfor %}],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.5)',
+                                                'rgba(54, 162, 235, 0.5)',
+                                                'rgba(255, 206, 86, 0.5)',
+                                                'rgba(75, 192, 192, 0.5)',
+                                                'rgba(153, 102, 255, 0.5)',
+                                                'rgba(255, 159, 64, 0.5)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255,99,132,1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                        }],
+
+                                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                                        labels: [
+                                            'Negative',
+                                            'Positive',
+                                            'Neutral',
+                                        ]
+                                    };
+                                    var doughnutPieOptions = {
+                                        responsive: true,
+                                        animation: {
+                                            animateScale: true,
+                                            animateRotate: true
+                                        }
+                                    };
+                                    var areaData = {
+                                        labels: ["2013", "2014", "2015", "2016", "2017"],
+                                        datasets: [{
+                                            label: '# of Votes',
+                                            data: [12, 19, 3, 5, 2, 3],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255, 159, 64, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255,99,132,1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                            borderWidth: 1,
+                                            fill: true, // 3: no fill
+                                        }]
+                                    };
+
+                                    var areaOptions = {
+                                        plugins: {
+                                            filler: {
+                                                propagate: true
+                                            }
+                                        }
+                                    }
+
+                                    var multiAreaData = {
+                                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                        datasets: [{
+                                            label: 'Facebook',
+                                            data: [8, 11, 13, 15, 12, 13, 16, 15, 13, 19, 11, 14],
+                                            borderColor: ['rgba(255, 99, 132, 0.5)'],
+                                            backgroundColor: ['rgba(255, 99, 132, 0.5)'],
+                                            borderWidth: 1,
+                                            fill: true
+                                        }, {
+                                            label: 'Twitter',
+                                            data: [7, 17, 12, 16, 14, 18, 16, 12, 15, 11, 13, 9],
+                                            borderColor: ['rgba(54, 162, 235, 0.5)'],
+                                            backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+                                            borderWidth: 1,
+                                            fill: true
+                                        }, {
+                                            label: 'Linkedin',
+                                            data: [6, 14, 16, 20, 12, 18, 15, 12, 17, 19, 15, 11],
+                                            borderColor: ['rgba(255, 206, 86, 0.5)'],
+                                            backgroundColor: ['rgba(255, 206, 86, 0.5)'],
+                                            borderWidth: 1,
+                                            fill: true
+                                        }]
+                                    };
+
+                                    var multiAreaOptions = {
+                                        plugins: {
+                                            filler: {
+                                                propagate: true
+                                            }
+                                        },
+                                        elements: {
+                                            point: {
+                                                radius: 0
+                                            }
+                                        },
+                                        scales: {
+                                            xAxes: [{
+                                                gridLines: {
+                                                    display: false
+                                                }
+                                            }],
+                                            yAxes: [{
+                                                gridLines: {
+                                                    display: false
+                                                }
+                                            }]
+                                        }
+                                    }
+
+                                    var scatterChartData = {
+                                        datasets: [{
+                                            label: 'First Dataset',
+                                            data: [{
+                                                x: -10,
+                                                y: 0
+                                            }, {
+                                                x: 0,
+                                                y: 3
+                                            }, {
+                                                x: -25,
+                                                y: 5
+                                            }, {
+                                                x: 40,
+                                                y: 5
+                                            }],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255,99,132,1)'
+                                            ],
+                                            borderWidth: 1
+                                        }, {
+                                            label: 'Second Dataset',
+                                            data: [{
+                                                x: 10,
+                                                y: 5
+                                            }, {
+                                                x: 20,
+                                                y: -30
+                                            }, {
+                                                x: -25,
+                                                y: 15
+                                            }, {
+                                                x: -10,
+                                                y: 5
+                                            }],
+                                            backgroundColor: [
+                                                'rgba(54, 162, 235, 0.2)',
+                                            ],
+                                            borderColor: [
+                                                'rgba(54, 162, 235, 1)',
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    }
+
+                                    var scatterChartOptions = {
+                                            scales: {
+                                                xAxes: [{
+                                                    type: 'linear',
+                                                    position: 'bottom'
+                                                }]
+                                            }
+                                        }
+                                        // Get context with jQuery - using jQuery's .get() method.
+                                    if ($("#barChart").length) {
+                                        var barChartCanvas = $("#barChart").get(0).getContext("2d");
+                                        // This will get the first returned node in the jQuery collection.
+                                        var barChart = new Chart(barChartCanvas, {
+                                            type: 'bar',
+                                            data: data,
+                                            options: options
+                                        });
+                                    }
+
+                                    if ($("#lineChart").length) {
+                                        var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
+                                        var lineChart = new Chart(lineChartCanvas, {
+                                            type: 'line',
+                                            data: data,
+                                            options: options
+                                        });
+                                    }
+
+                                    if ($("#linechart-multi").length) {
+                                        var multiLineCanvas = $("#linechart-multi").get(0).getContext("2d");
+                                        var lineChart = new Chart(multiLineCanvas, {
+                                            type: 'line',
+                                            data: multiLineData,
+                                            options: options
+                                        });
+                                    }
+
+                                    if ($("#areachart-multi").length) {
+                                        var multiAreaCanvas = $("#areachart-multi").get(0).getContext("2d");
+                                        var multiAreaChart = new Chart(multiAreaCanvas, {
+                                            type: 'line',
+                                            data: multiAreaData,
+                                            options: multiAreaOptions
+                                        });
+                                    }
+
+                                    if ($("#doughnutChart").length) {
+                                        var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
+                                        var doughnutChart = new Chart(doughnutChartCanvas, {
+                                            type: 'doughnut',
+                                            data: doughnutPieData,
+                                            options: doughnutPieOptions
+                                        });
+                                    }
+
+                                    if ($("#pieChart").length) {
+                                        var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+                                        var pieChart = new Chart(pieChartCanvas, {
+                                            type: 'pie',
+                                            data: doughnutPieData,
+                                            options: doughnutPieOptions
+                                        });
+                                    }
+
+                                    if ($("#pieChart2").length) {
+                                        var pieChartCanvas = $("#pieChart2").get(0).getContext("2d");
+                                        var pieChart = new Chart(pieChartCanvas, {
+                                            type: 'pie',
+                                            data: doughnutPieData,
+                                            options: doughnutPieOptions
+                                        });
+                                    }
+
+                                    if ($("#areaChart").length) {
+                                        var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
+                                        var areaChart = new Chart(areaChartCanvas, {
+                                            type: 'line',
+                                            data: areaData,
+                                            options: areaOptions
+                                        });
+                                    }
+
+                                    if ($("#scatterChart").length) {
+                                        var scatterChartCanvas = $("#scatterChart").get(0).getContext("2d");
+                                        var scatterChart = new Chart(scatterChartCanvas, {
+                                            type: 'scatter',
+                                            data: scatterChartData,
+                                            options: scatterChartOptions
+                                        });
+                                    }
+
+                                    if ($("#browserTrafficChart").length) {
+                                        var doughnutChartCanvas = $("#browserTrafficChart").get(0).getContext("2d");
+                                        var doughnutChart = new Chart(doughnutChartCanvas, {
+                                            type: 'doughnut',
+                                            data: browserTrafficData,
+                                            options: doughnutPieOptions
+                                        });
+                                    }
+                                });
+
+                            },
+
+
+                        })
+                    }
+
+
+                });
+            </script>
         </div>
-</form>
-        <!-- content-wrapper ends -->
-        <!-- partial:partials/_footer.html -->
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2022. All rights reserved.</span>
-          </div>
-        </footer>
-        <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
-    </div>
-    <!-- page-body-wrapper ends -->
-  </div>
-  <!-- container-scroller -->
-
-  <!-- Bootstrap:js -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-  <!-- plugins:js -->
-  <script src="{{ url_for('static', filename = 'vendors/js/vendor.bundle.base.js')}}"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page -->
-  <script src="{{ url_for('static', filename = 'vendors/chart.js/Chart.min.js')}}"></script>
-  <script src="{{ url_for('static', filename = 'vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
-  <script src="{{ url_for('static', filename = 'vendors/progressbar.js/progressbar.min.js')}}"></script>
-
-  <!-- End plugin js for this page -->
-  <!-- inject:js -->
-  <script src="{{ url_for('static', filename = 'js/off-canvas.js')}}"></script>
-  <script src="{{ url_for('static', filename = 'js/hoverable-collapse.js')}}"></script>
-  <script src="{{ url_for('static', filename = 'js/template.js')}}"></script>
-  <script src="{{ url_for('static', filename = 'js/settings.js')}}"></script>
-  <script src="{{ url_for('static', filename = 'js/todolist.js')}}"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="{{ url_for('static', filename = 'js/jquery.cookie.js')}}" type="text/javascript"></script>
-  <script src="{{ url_for('static', filename = 'js/dashboard.js')}}"></script>
-  <script src="{{ url_for('static', filename = 'js/Chart.roundedBarCharts.js')}}"></script>
-
-  <!-- End custom js for this page-->
-
-<script>
-
-    $(document).ready(function(){
-    document.getElementById("sentiment_date").defaultValue="2022-04-18"
-    document.getElementById("stock_date").defaultValue="2022-04-18"
-
-    var company_selection = document.getElementById("company_name").value
-    var tweet_date_selection = document.getElementById("sentiment_date").value
-    var stock_date_selection = document.getElementById("stock_date").value
-
-    var tweet_date = new Date(Date.parse(tweet_date_selection));
-    var stock_date = new Date(Date.parse(stock_date_selection));
-
-    var formatted_tweet_date_selection = tweet_date.toUTCString()
-    var formatted_stock_date_selection = stock_date.toUTCString()
-
-
-    document.getElementById("company_selection").innerHTML= company_selection
-    document.getElementById("tweet_date_selection").innerHTML= formatted_tweet_date_selection
-    document.getElementById("stock_date_selection").innerHTML= formatted_stock_date_selection
-
-    document.getElementById('sentiment_date').onchange = function () {
-
-    var tweet_date_selection = document.getElementById("sentiment_date")
-    var stock_date_selection = document.getElementById("stock_date")
-
-      stock_date_selection.setAttribute('value',  this.value);
-      stock_date_selection.setAttribute('min',  this.value);
-      //document.getElementById("stock_date_selection").innerHTML= this.value
-
-      var date_array = stock_date_selection.value.split("-")
-      var day = parseInt(date_array[2])+3
-      if(day < 10)
-        day = '0' + day.toString();
-      var maxDate = date_array[0] + '-' + date_array[1] + '-' + day
-
-      stock_date_selection.setAttribute('max',  maxDate);
-
-      var tweet_date = new Date(Date.parse(tweet_date_selection.value));
-      var formatted_tweet_date_selection = tweet_date.toUTCString()
-
-      document.getElementById("tweet_date_selection").innerHTML= formatted_tweet_date_selection
-      document.getElementById("stock_date_selection").innerHTML= ""
-
-
-    };
-
-    document.getElementById('stock_date').onchange = function () {
-
-
-      var stock_date_selection = document.getElementById("stock_date")
-      var stock_date = new Date(Date.parse(stock_date_selection.value));
-      var formatted_stock_date_selection = stock_date.toUTCString()
-
-      document.getElementById("stock_date_selection").innerHTML= formatted_stock_date_selection
-    }
-
-    document.getElementById('company_name').onchange = function () {
-
-      var company_selection = document.getElementById("company_name").value
-      document.getElementById("company_selection").innerHTML= company_selection
-
-
-    }
-
-
-    //function to restrict weekends for stock graph date picker
-    $(function(){
-        const stock_picker = document.getElementById('stock_date');
-        stock_picker.addEventListener('input', function(e){
-          var day = new Date(this.value).getUTCDay();
-          if([6,0].includes(day)){
-            e.preventDefault();
-            this.value = document.getElementById('sentiment_date').value;
-            alert('Weekends not allowed');
-          }
-        });
-    });
-
-
-    //POST ajax to  send data to backend after form is submitted
-      $("#post-form").submit(function(e){
-        e.preventDefault();
-        console.log("post")
-
-        $.ajax({
-          type:'POST',
-          url:"/get_data",
-          data:{
-              company_name :$('#company_name').val(),
-              sentiment_date:$('#sentiment_date').val(),
-              stock_date:$('#stock_date').val(),
-          },
-          success: function(response){
-            //printing data in console
-            console.log("success post");
-            console.log($('#company_name').val());
-
-            //response from URL
-            full_data = JSON.parse(response.payload);
-            const _postdata = full_data['data'];
-            const _postlabels = full_data['labels'];
-            const _postsentiments = full_data['sentiments']
-            const _min = full_data['minimum']
-            const _max = full_data['maximum']
-
-            let negative_count = _postsentiments[0]
-            let positive_count = _postsentiments[1]
-            let neutral_count = _postsentiments[2]
-
-            document.getElementById("negative_count").innerHTML= negative_count
-            document.getElementById("positive_count").innerHTML= positive_count
-            document.getElementById("neutral_count").innerHTML= neutral_count
-
-
-
-            //function to analyze pie chart
-            $(function(){
-
-
-              //finding index of maximum number of sentiments and displaying an analysis based on output
-              var indexOfMaxValue = _postsentiments.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
-              console.log(indexOfMaxValue)
-              if (indexOfMaxValue == 0){
-                document.getElementById("sentiment_analysis").innerHTML=
-                "There was a general <p style='color:red; display: inline;'><strong>Negative</strong></p> sentiment in tweets about " + company_name.value + ""
-              }
-              else if(indexOfMaxValue == 1){
-                document.getElementById("sentiment_analysis").innerHTML=
-                "There was a general  <p style='color:green; display: inline;'><strong>Positive</strong></p> sentiment in tweets about " + company_name.value + ""
-              }
-              else if(indexOfMaxValue == 2) {
-                document.getElementById("sentiment_analysis").innerHTML=
-                "There was a general <p style='color:#B59D66; display: inline;'><strong>Neutral</strong></p> sentiment in tweets about " + company_name.value + ""
-              }
-              else{
-                document.getElementById("sentiment_analysis").innerHTML=
-                "The general sentiments in tweets about " + company_name.value + " were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
-              }
-            });
-
-
-            //function to analyze stock graph
-            $(function(){
-              var first_stockprice =_postdata[0];
-              var last_stockprice =_postdata[_postdata.length-1];
-              //finding percentage change in price
-              var percentage_change = ((last_stockprice/first_stockprice) *100) - 100
-              var rounded_percentage_change = Math.round((percentage_change + Number.EPSILON) * 100) / 100
-              //finding peak and trough values
-              var peak_value = Math.max.apply(Math, _postdata)
-              var minimum_value = Math.min.apply(Math, _postdata)
-              console.log(peak_value)
-              console.log(minimum_value)
-
-              if (rounded_percentage_change < 0){
-                document.getElementById("main_analysis").innerHTML= "<strong>The price decreased by "
-                + (-1 * rounded_percentage_change) + "% during the course of the day.</strong><br>";
-              } else{
-                document.getElementById("main_analysis").innerHTML= "<strong>The price increased by "
-                + rounded_percentage_change + "% during the course of the day.</strong><br>"
-              }
-
-              document.getElementById("stock_analysis").innerHTML=
-              "<ul> <li>There was a "
-              + rounded_percentage_change.toString() +
-              "% change in the " + company_name.value + " stock price.</li> <li>It started at $" +
-              first_stockprice.toString()+ " and ended at $" + last_stockprice.toString()
-               + ".</li> <li>It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.</li></ul>";
-
-            });
-
-            console.log("in post")
-
-            console.log(full_data)
-
-
-            //here
-            $(function() {
-              /* ChartJS
-               * -------
-               * Data and config for chartjs
-               */
-               console.log("sentiments:")
-               console.log(_postsentiments)
-              'use strict';
-              var data = {
-                labels : _postlabels,
-                //labels: [{% for label in labels %} {{label}},{% endfor %}],
-                //labels: {{labels}},
-                datasets: [{
-                  label: 'Stock Prices',
-                  data: _postdata,
-
-                  //data: [{% for value in stock_list %} {{value}},{% endfor %}],
-                  //data: {{stock_list}},
-                  backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                  ],
-                  borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                  ],
-                  borderWidth: 1,
-                  fill: false
-                },]
-            };
-              var multiLineData = {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [{
-                    label: 'Dataset 1',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderColor: [
-                      '#587ce4'
-                    ],
-                    borderWidth: 2,
-                    fill: false
-                  },
-                  {
-                    label: 'Dataset 2',
-                    data: [5, 23, 7, 12, 42, 23],
-                    borderColor: [
-                      '#ede190'
-                    ],
-                    borderWidth: 2,
-                    fill: false
-                  },
-                  {
-                    label: 'Dataset 3',
-                    data: [15, 10, 21, 32, 12, 33],
-                    borderColor: [
-                      '#f44252'
-                    ],
-                    borderWidth: 2,
-                    fill: false
-                  }
-                ]
-              };
-              var options = {
-                scales: {
-                  yAxes: [{
-                    display: true,
-                    ticks: {
-                      beginAtZero: true,
-                      min:Math.floor(_min),
-                      max:Math.ceil(_max)
-                    }
-                  }]
-                },
-                legend: {
-                  display: false
-                },
-                elements: {
-                  point: {
-                    radius: 0
-                  }
-                }
-
-              };
-              var doughnutPieData = {
-                datasets: [{
-                  data: _postsentiments,
-                  //data: [{% for val in vals %} {{val}},{% endfor %}],
-                  backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(153, 102, 255, 0.5)',
-                    'rgba(255, 159, 64, 0.5)'
-                  ],
-                  borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                  ],
-                }],
-
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                  'Negative',
-                  'Positive',
-                  'Neutral',
-                ]
-              };
-              var doughnutPieOptions = {
-                responsive: true,
-                animation: {
-                  animateScale: true,
-                  animateRotate: true
-                }
-              };
-              var areaData = {
-                labels: ["2013", "2014", "2015", "2016", "2017"],
-                datasets: [{
-                  label: '# of Votes',
-                  data: [12, 19, 3, 5, 2, 3],
-                  backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                  ],
-                  borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                  ],
-                  borderWidth: 1,
-                  fill: true, // 3: no fill
-                }]
-              };
-
-              var areaOptions = {
-                plugins: {
-                  filler: {
-                    propagate: true
-                  }
-                }
-              }
-
-              var multiAreaData = {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: 'Facebook',
-                    data: [8, 11, 13, 15, 12, 13, 16, 15, 13, 19, 11, 14],
-                    borderColor: ['rgba(255, 99, 132, 0.5)'],
-                    backgroundColor: ['rgba(255, 99, 132, 0.5)'],
-                    borderWidth: 1,
-                    fill: true
-                  },
-                  {
-                    label: 'Twitter',
-                    data: [7, 17, 12, 16, 14, 18, 16, 12, 15, 11, 13, 9],
-                    borderColor: ['rgba(54, 162, 235, 0.5)'],
-                    backgroundColor: ['rgba(54, 162, 235, 0.5)'],
-                    borderWidth: 1,
-                    fill: true
-                  },
-                  {
-                    label: 'Linkedin',
-                    data: [6, 14, 16, 20, 12, 18, 15, 12, 17, 19, 15, 11],
-                    borderColor: ['rgba(255, 206, 86, 0.5)'],
-                    backgroundColor: ['rgba(255, 206, 86, 0.5)'],
-                    borderWidth: 1,
-                    fill: true
-                  }
-                ]
-              };
-
-              var multiAreaOptions = {
-                plugins: {
-                  filler: {
-                    propagate: true
-                  }
-                },
-                elements: {
-                  point: {
-                    radius: 0
-                  }
-                },
-                scales: {
-                  xAxes: [{
-                    gridLines: {
-                      display: false
-                    }
-                  }],
-                  yAxes: [{
-                    gridLines: {
-                      display: false
-                    }
-                  }]
-                }
-              }
-
-              var scatterChartData = {
-                datasets: [{
-                    label: 'First Dataset',
-                    data: [{
-                        x: -10,
-                        y: 0
-                      },
-                      {
-                        x: 0,
-                        y: 3
-                      },
-                      {
-                        x: -25,
-                        y: 5
-                      },
-                      {
-                        x: 40,
-                        y: 5
-                      }
-                    ],
-                    backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)'
-                    ],
-                    borderColor: [
-                      'rgba(255,99,132,1)'
-                    ],
-                    borderWidth: 1
-                  },
-                  {
-                    label: 'Second Dataset',
-                    data: [{
-                        x: 10,
-                        y: 5
-                      },
-                      {
-                        x: 20,
-                        y: -30
-                      },
-                      {
-                        x: -25,
-                        y: 15
-                      },
-                      {
-                        x: -10,
-                        y: 5
-                      }
-                    ],
-                    backgroundColor: [
-                      'rgba(54, 162, 235, 0.2)',
-                    ],
-                    borderColor: [
-                      'rgba(54, 162, 235, 1)',
-                    ],
-                    borderWidth: 1
-                  }
-                ]
-              }
-
-              var scatterChartOptions = {
-                scales: {
-                  xAxes: [{
-                    type: 'linear',
-                    position: 'bottom'
-                  }]
-                }
-              }
-              // Get context with jQuery - using jQuery's .get() method.
-              if ($("#barChart").length) {
-                var barChartCanvas = $("#barChart").get(0).getContext("2d");
-                // This will get the first returned node in the jQuery collection.
-                var barChart = new Chart(barChartCanvas, {
-                  type: 'bar',
-                  data: data,
-                  options: options
-                });
-              }
-
-              if ($("#lineChart").length) {
-                var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
-                var lineChart = new Chart(lineChartCanvas, {
-                  type: 'line',
-                  data: data,
-                  options: options
-                });
-              }
-
-              if ($("#linechart-multi").length) {
-                var multiLineCanvas = $("#linechart-multi").get(0).getContext("2d");
-                var lineChart = new Chart(multiLineCanvas, {
-                  type: 'line',
-                  data: multiLineData,
-                  options: options
-                });
-              }
-
-              if ($("#areachart-multi").length) {
-                var multiAreaCanvas = $("#areachart-multi").get(0).getContext("2d");
-                var multiAreaChart = new Chart(multiAreaCanvas, {
-                  type: 'line',
-                  data: multiAreaData,
-                  options: multiAreaOptions
-                });
-              }
-
-              if ($("#doughnutChart").length) {
-                var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
-                var doughnutChart = new Chart(doughnutChartCanvas, {
-                  type: 'doughnut',
-                  data: doughnutPieData,
-                  options: doughnutPieOptions
-                });
-              }
-
-              if ($("#pieChart").length) {
-                var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
-                var pieChart = new Chart(pieChartCanvas, {
-                  type: 'pie',
-                  data: doughnutPieData,
-                  options: doughnutPieOptions
-                });
-              }
-
-              if ($("#pieChart2").length) {
-                var pieChartCanvas = $("#pieChart2").get(0).getContext("2d");
-                var pieChart = new Chart(pieChartCanvas, {
-                  type: 'pie',
-                  data: doughnutPieData,
-                  options: doughnutPieOptions
-                });
-              }
-
-              if ($("#areaChart").length) {
-                var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
-                var areaChart = new Chart(areaChartCanvas, {
-                  type: 'line',
-                  data: areaData,
-                  options: areaOptions
-                });
-              }
-
-              if ($("#scatterChart").length) {
-                var scatterChartCanvas = $("#scatterChart").get(0).getContext("2d");
-                var scatterChart = new Chart(scatterChartCanvas, {
-                  type: 'scatter',
-                  data: scatterChartData,
-                  options: scatterChartOptions
-                });
-              }
-
-              if ($("#browserTrafficChart").length) {
-                var doughnutChartCanvas = $("#browserTrafficChart").get(0).getContext("2d");
-                var doughnutChart = new Chart(doughnutChartCanvas, {
-                  type: 'doughnut',
-                  data: browserTrafficData,
-                  options: doughnutPieOptions
-                });
-              }
-            });
-
-
-             //alert(data)
-          }
-        });
-        //document.getElementById('company_name').value = ''
-      });
-
-
-     $.ajax({
-      url: "/get_data",
-      type: "GET",
-      data: {vals: ''},
-      success: function(response) {
-
-        full_data = JSON.parse(response.payload);
-        const _data = full_data['data'];
-        const _labels = full_data['labels'];
-        const _sentiments = full_data['sentiments']
-        const _min = full_data['minimum']
-        const _max = full_data['maximum']
-        console.log(full_data)
-        let negative_count = _sentiments[0]
-        let positive_count = _sentiments[1]
-        let neutral_count = _sentiments[2]
-
-        document.getElementById("negative_count").innerHTML= negative_count
-        document.getElementById("positive_count").innerHTML= positive_count
-        document.getElementById("neutral_count").innerHTML= neutral_count
-
-
-
-
-        //function to analyze pie chart
-        $(function(){
-
-
-            //finding index of maximum number of sentiments and displaying an analysis based on output
-            var indexOfMaxValue = _sentiments.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
-            console.log(indexOfMaxValue)
-            if (indexOfMaxValue == 0){
-              document.getElementById("sentiment_analysis").innerHTML=
-              "There was a general <p style='color:red; display: inline; font-weight: 900'>Negative</p> sentiment in tweets about " + company_name.value + ""
-            }
-            else if(indexOfMaxValue == 1){
-              document.getElementById("sentiment_analysis").innerHTML=
-              "There was a general  <p style='color:green; display: inline; font-weight: 900'>Positive</p> sentiment in tweets about " + company_name.value + ""
-            }
-            else if(indexOfMaxValue == 2) {
-              document.getElementById("sentiment_analysis").innerHTML=
-              "There was a general <p style='color:#B59D66; display: inline; font-weight: 900'>Neutral</p> sentiment in tweets about " + company_name.value + ""
-            }
-            else{
-              document.getElementById("sentiment_analysis").innerHTML=
-              "The general sentiments in tweets about " + company_name.value + " were <p style='display: inline; font-weight: 900'>Inconclusive</p>"
-            }
-        });
-
-          $(function(){
-            var first_stockprice =_data[0];
-            var last_stockprice =_data[_data.length-1];
-            //finding percentage change in price
-            var percentage_change = ((last_stockprice/first_stockprice) *100) - 100
-            var rounded_percentage_change = Math.round((percentage_change + Number.EPSILON) * 100) / 100
-            //finding peak and trough values
-            var peak_value = Math.max.apply(Math, _data)
-            var minimum_value = Math.min.apply(Math, _data)
-            console.log(peak_value)
-            console.log(minimum_value)
-
-
-            if (rounded_percentage_change < 0){
-                document.getElementById("main_analysis").innerHTML= "<strong>The price decreased by "
-                + (-1 * rounded_percentage_change) + "% during the course of the day.</strong><br>";
-              } else{
-                document.getElementById("main_analysis").innerHTML= "<strong>The price increased by "
-                + rounded_percentage_change + "% during the course of the day.</strong><br>"
-              }
-
-
-            document.getElementById("stock_analysis").innerHTML=
-              "<ul> <li>There was a "
-              + rounded_percentage_change.toString() +
-              "% change in the " + company_name.value + " stock price.</li> <li>It started at $" +
-              first_stockprice.toString()+ " and ended at $" + last_stockprice.toString()
-               + ".</li> <li>It peaked at $" + peak_value.toString() + " and hit a minimum value of $" + minimum_value.toString() + " during the course of the day.</li></ul>";
-
-            });
-
-
-
-    $(function() {
-      /* ChartJS
-       * -------
-       * Data and config for chartjs
-       */
-       console.log("sentiments:")
-       console.log(_sentiments)
-      'use strict';
-      var data = {
-        labels : _labels,
-        //labels: [{% for label in labels %} {{label}},{% endfor %}],
-        //labels: {{labels}},
-        datasets: [{
-          label: 'Stock Prices',
-          data: _data,
-          //data: [{% for value in stock_list %} {{value}},{% endfor %}],
-          //data: {{stock_list}},
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1,
-          fill: false
-        }]
-      };
-      var multiLineData = {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: 'Dataset 1',
-            data: [12, 19, 3, 5, 2, 3],
-            borderColor: [
-              '#587ce4'
-            ],
-            borderWidth: 2,
-            fill: false
-          },
-          {
-            label: 'Dataset 2',
-            data: [5, 23, 7, 12, 42, 23],
-            borderColor: [
-              '#ede190'
-            ],
-            borderWidth: 2,
-            fill: false
-          },
-          {
-            label: 'Dataset 3',
-            data: [15, 10, 21, 32, 12, 33],
-            borderColor: [
-              '#f44252'
-            ],
-            borderWidth: 2,
-            fill: false
-          }
-        ]
-      };
-      var options = {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-              stepSize:20,
-              min:Math.floor(_min),
-              max:Math.ceil(_max)
-            }
-          }]
-        },
-        legend: {
-          display: false
-        },
-        elements: {
-          point: {
-            radius: 0
-          }
-        }
-
-      };
-      var doughnutPieData = {
-        datasets: [{
-          data: _sentiments,
-          //data: [{% for val in vals %} {{val}},{% endfor %}],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.5)',
-            'rgba(54, 162, 235, 0.5)',
-            'rgba(255, 206, 86, 0.5)',
-            'rgba(75, 192, 192, 0.5)',
-            'rgba(153, 102, 255, 0.5)',
-            'rgba(255, 159, 64, 0.5)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-        }],
-
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-          'Negative',
-          'Positive',
-          'Neutral',
-        ]
-      };
-      var doughnutPieOptions = {
-        responsive: true,
-        animation: {
-          animateScale: true,
-          animateRotate: true
-        }
-      };
-      var areaData = {
-        labels: ["2013", "2014", "2015", "2016", "2017"],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1,
-          fill: true, // 3: no fill
-        }]
-      };
-
-      var areaOptions = {
-        plugins: {
-          filler: {
-            propagate: true
-          }
-        }
-      }
-
-      var multiAreaData = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [{
-            label: 'Facebook',
-            data: [8, 11, 13, 15, 12, 13, 16, 15, 13, 19, 11, 14],
-            borderColor: ['rgba(255, 99, 132, 0.5)'],
-            backgroundColor: ['rgba(255, 99, 132, 0.5)'],
-            borderWidth: 1,
-            fill: true
-          },
-          {
-            label: 'Twitter',
-            data: [7, 17, 12, 16, 14, 18, 16, 12, 15, 11, 13, 9],
-            borderColor: ['rgba(54, 162, 235, 0.5)'],
-            backgroundColor: ['rgba(54, 162, 235, 0.5)'],
-            borderWidth: 1,
-            fill: true
-          },
-          {
-            label: 'Linkedin',
-            data: [6, 14, 16, 20, 12, 18, 15, 12, 17, 19, 15, 11],
-            borderColor: ['rgba(255, 206, 86, 0.5)'],
-            backgroundColor: ['rgba(255, 206, 86, 0.5)'],
-            borderWidth: 1,
-            fill: true
-          }
-        ]
-      };
-
-      var multiAreaOptions = {
-        plugins: {
-          filler: {
-            propagate: true
-          }
-        },
-        elements: {
-          point: {
-            radius: 0
-          }
-        },
-        scales: {
-          xAxes: [{
-            gridLines: {
-              display: false
-            }
-          }],
-          yAxes: [{
-            gridLines: {
-              display: false
-            }
-          }]
-        }
-      }
-
-      var scatterChartData = {
-        datasets: [{
-            label: 'First Dataset',
-            data: [{
-                x: -10,
-                y: 0
-              },
-              {
-                x: 0,
-                y: 3
-              },
-              {
-                x: -25,
-                y: 5
-              },
-              {
-                x: 40,
-                y: 5
-              }
-            ],
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255,99,132,1)'
-            ],
-            borderWidth: 1
-          },
-          {
-            label: 'Second Dataset',
-            data: [{
-                x: 10,
-                y: 5
-              },
-              {
-                x: 20,
-                y: -30
-              },
-              {
-                x: -25,
-                y: 15
-              },
-              {
-                x: -10,
-                y: 5
-              }
-            ],
-            backgroundColor: [
-              'rgba(54, 162, 235, 0.2)',
-            ],
-            borderColor: [
-              'rgba(54, 162, 235, 1)',
-            ],
-            borderWidth: 1
-          }
-        ]
-      }
-
-      var scatterChartOptions = {
-        scales: {
-          xAxes: [{
-            type: 'linear',
-            position: 'bottom'
-          }]
-        }
-      }
-      // Get context with jQuery - using jQuery's .get() method.
-      if ($("#barChart").length) {
-        var barChartCanvas = $("#barChart").get(0).getContext("2d");
-        // This will get the first returned node in the jQuery collection.
-        var barChart = new Chart(barChartCanvas, {
-          type: 'bar',
-          data: data,
-          options: options
-        });
-      }
-
-      if ($("#lineChart").length) {
-        var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
-        var lineChart = new Chart(lineChartCanvas, {
-          type: 'line',
-          data: data,
-          options: options
-        });
-      }
-
-      if ($("#linechart-multi").length) {
-        var multiLineCanvas = $("#linechart-multi").get(0).getContext("2d");
-        var lineChart = new Chart(multiLineCanvas, {
-          type: 'line',
-          data: multiLineData,
-          options: options
-        });
-      }
-
-      if ($("#areachart-multi").length) {
-        var multiAreaCanvas = $("#areachart-multi").get(0).getContext("2d");
-        var multiAreaChart = new Chart(multiAreaCanvas, {
-          type: 'line',
-          data: multiAreaData,
-          options: multiAreaOptions
-        });
-      }
-
-      if ($("#doughnutChart").length) {
-        var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
-        var doughnutChart = new Chart(doughnutChartCanvas, {
-          type: 'doughnut',
-          data: doughnutPieData,
-          options: doughnutPieOptions
-        });
-      }
-
-      if ($("#pieChart").length) {
-        var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
-        var pieChart = new Chart(pieChartCanvas, {
-          type: 'pie',
-          data: doughnutPieData,
-          options: doughnutPieOptions
-        });
-      }
-
-      if ($("#pieChart2").length) {
-        var pieChartCanvas = $("#pieChart2").get(0).getContext("2d");
-        var pieChart = new Chart(pieChartCanvas, {
-          type: 'pie',
-          data: doughnutPieData,
-          options: doughnutPieOptions
-        });
-      }
-
-      if ($("#areaChart").length) {
-        var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
-        var areaChart = new Chart(areaChartCanvas, {
-          type: 'line',
-          data: areaData,
-          options: areaOptions
-        });
-      }
-
-      if ($("#scatterChart").length) {
-        var scatterChartCanvas = $("#scatterChart").get(0).getContext("2d");
-        var scatterChart = new Chart(scatterChartCanvas, {
-          type: 'scatter',
-          data: scatterChartData,
-          options: scatterChartOptions
-        });
-      }
-
-      if ($("#browserTrafficChart").length) {
-        var doughnutChartCanvas = $("#browserTrafficChart").get(0).getContext("2d");
-        var doughnutChart = new Chart(doughnutChartCanvas, {
-          type: 'doughnut',
-          data: browserTrafficData,
-          options: doughnutPieOptions
-        });
-      }
-    });
-
-  },
-
-
-})
-
-});
-
-
-</script>
-
 </body>
 
 </html>
