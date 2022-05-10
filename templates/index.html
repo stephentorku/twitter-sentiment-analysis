@@ -124,13 +124,14 @@
 
                                       <div>
                                         <div class="dropdown">
-                                        <input type="date" name="sentiment_date" id="sentiment_date">
+                                        <input type="date" name="sentiment_date" id="sentiment_date" min="2022-04-18" max="2022-04-23">
                                         </div>
                                       </div>
                                     </div>
                                     <div class="chartjs-bar-wrapper mt-3">
                                       <canvas id="pieChart"></canvas>
                                     </div>
+                                    <div style="text-align:center"><strong>Negative Count:</strong> <div id="negative_count" style="display: inline"></div> , &nbsp; <strong>Positive Count:</strong> <div id="positive_count" style="display: inline"></div>, &nbsp; <strong>Neutral Count:</strong> <div id="neutral_count" style="display: inline"></div> </div>
                                   </div>
                                 </div>
                               </div>
@@ -149,7 +150,7 @@
                                       </div>
                                       <div>
                                         <div class="dropdown">
-                                          <input type="date" name="stock_date" id="stock_date">
+                                          <input type="date" name="stock_date" id="stock_date" min="2022-04-18" max="2022-04-26">
                                         </div>
                                       </div>
                                     </div>
@@ -280,8 +281,8 @@
 <script>
 
     $(document).ready(function(){
-    document.getElementById("sentiment_date").defaultValue="2022-04-09"
-    document.getElementById("stock_date").defaultValue="2022-04-12"
+    document.getElementById("sentiment_date").defaultValue="2022-04-18"
+    document.getElementById("stock_date").defaultValue="2022-04-18"
 
     var company_selection = document.getElementById("company_name").value
     var tweet_date_selection = document.getElementById("sentiment_date").value
@@ -382,6 +383,15 @@
             const _postsentiments = full_data['sentiments']
             const _min = full_data['minimum']
             const _max = full_data['maximum']
+
+            let negative_count = _postsentiments[0]
+            let positive_count = _postsentiments[1]
+            let neutral_count = _postsentiments[2]
+
+            document.getElementById("negative_count").innerHTML= negative_count
+            document.getElementById("positive_count").innerHTML= positive_count
+            document.getElementById("neutral_count").innerHTML= neutral_count
+
 
 
             //function to analyze pie chart
@@ -840,6 +850,15 @@
         const _min = full_data['minimum']
         const _max = full_data['maximum']
         console.log(full_data)
+        let negative_count = _sentiments[0]
+        let positive_count = _sentiments[1]
+        let neutral_count = _sentiments[2]
+
+        document.getElementById("negative_count").innerHTML= negative_count
+        document.getElementById("positive_count").innerHTML= positive_count
+        document.getElementById("neutral_count").innerHTML= neutral_count
+
+
 
 
         //function to analyze pie chart
