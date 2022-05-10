@@ -25,28 +25,34 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="{{ url_for('static', filename = 'images/favicon.png')}}" />
 
+  <style>
+    html, body {
+    background-color: #f4f5f7;
+    }
+  </style>
+
 </head>
 <body>
   <div class="container-scroller">
 
     <!-- partial:partials/_navbar.html -->
-    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-        <div class="me-3">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
-            <span class="icon-menu"></span>
-          </button>
-        </div>
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row" style="position: absolute;">
+<!--      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">-->
+<!--        <div class="me-3">-->
+<!--          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">-->
+<!--            <span class="icon-menu"></span>-->
+<!--          </button>-->
+<!--        </div>-->
 
-      </div>
-      <div class="navbar-menu-wrapper d-flex align-items-top" style="height: 100px">
+<!--      </div>-->
+      <div class="navbar-menu-wrapper d-flex align-items-top" style="padding-left: 150px;">
         <ul class="navbar-nav topspace">
           <li class="nav-item font-weight-semibold d-none d-lg-block ms-0" >
             <h1 class="welcome-text "> <span class="text-black fw-bold">Sentiment Analysis</span></h1>
 
             <div style="width:70%"><h3 class="welcome-sub-text">Through natural language processing, we compare sentiments from tweets to
               stock prices within a given day to find out if there is a correlation between sentiments on twitter and stock
-                prices.</h3></div>
+                prices. Twitter sentiments can be selected from 18th April, 2022 - 23rd April, 2022.</h3></div>
 
           </li>
         </ul>
@@ -62,14 +68,14 @@
 
       <!-- partial -->
       <!-- partial:partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <nav class="sidebar sidebar-offcanvas" id="sidebar" style="width: 100px">
         <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" href="index.html">
-              <i class="mdi mdi-grid-large menu-icon"></i>
-              <span class="menu-title">Dashboard</span>
-            </a>
-          </li>
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link" href="index.html">-->
+<!--              <i class="mdi mdi-grid-large menu-icon"></i>-->
+<!--              <span class="menu-title">Dashboard</span>-->
+<!--            </a>-->
+<!--          </li>-->
 
         </ul>
       </nav>
@@ -81,12 +87,6 @@
               <div class="home-tab">
                 <div class="tab-content tab-content-basic">
                   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
-
-                    <div>
-                      <div class="top_info_display"><strong>Company Selection:</strong> <div style="display:inline" id="company_selection"></div> </div>
-                      <div class="top_info_display"><strong>Tweet Date Selection:</strong> <div style="display:inline" id="tweet_date_selection"></div> </div>
-                      <div class="top_info_display"><strong>Stock Date Selection:</strong><div style="display:inline" id="stock_date_selection"></div> </div>
-                    </div><br>
 
 <form method ="POST" id="post-form" name="post-form">
     <div style="margin-left: 10px;">
@@ -107,6 +107,13 @@
                       </li>
                     </ul>
         </div>
+
+  <div>
+                      <div class="top_info_display"><strong>Company Selection:</strong> <div style="display:inline" id="company_selection"></div> </div>
+                      <div class="top_info_display"><strong>Tweet Date Selection:</strong> <div style="display:inline" id="tweet_date_selection"></div> </div>
+                      <div class="top_info_display"><strong>Stock Date Selection:</strong><div style="display:inline" id="stock_date_selection"></div> </div>
+                    </div><br>
+
 
                     <div class="tab-content" id="pills-tabContent">
                       <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -239,7 +246,7 @@
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2022. All rights reserved.</span>
           </div>
         </footer>
         <!-- partial -->
