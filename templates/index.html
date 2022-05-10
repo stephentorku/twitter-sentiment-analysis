@@ -287,24 +287,60 @@
     var tweet_date_selection = document.getElementById("sentiment_date").value
     var stock_date_selection = document.getElementById("stock_date").value
 
+    var tweet_date = new Date(Date.parse(tweet_date_selection));
+    var stock_date = new Date(Date.parse(stock_date_selection));
+
+    var formatted_tweet_date_selection = tweet_date.toUTCString()
+    var formatted_stock_date_selection = stock_date.toUTCString()
+
 
     document.getElementById("company_selection").innerHTML= company_selection
-    document.getElementById("tweet_date_selection").innerHTML= tweet_date_selection
-    document.getElementById("stock_date_selection").innerHTML= stock_date_selection
+    document.getElementById("tweet_date_selection").innerHTML= formatted_tweet_date_selection
+    document.getElementById("stock_date_selection").innerHTML= formatted_stock_date_selection
 
     document.getElementById('sentiment_date').onchange = function () {
-      document.getElementById('stock_date').setAttribute('value',  this.value);
-      document.getElementById('stock_date').setAttribute('min',  this.value);
 
-      var date_array = document.getElementById('stock_date').value.split("-")
+    var tweet_date_selection = document.getElementById("sentiment_date")
+    var stock_date_selection = document.getElementById("stock_date")
+
+      stock_date_selection.setAttribute('value',  this.value);
+      stock_date_selection.setAttribute('min',  this.value);
+      //document.getElementById("stock_date_selection").innerHTML= this.value
+
+      var date_array = stock_date_selection.value.split("-")
       var day = parseInt(date_array[2])+3
       if(day < 10)
         day = '0' + day.toString();
       var maxDate = date_array[0] + '-' + date_array[1] + '-' + day
 
-      document.getElementById('stock_date').setAttribute('max',  maxDate);
+      stock_date_selection.setAttribute('max',  maxDate);
+
+      var tweet_date = new Date(Date.parse(tweet_date_selection.value));
+      var formatted_tweet_date_selection = tweet_date.toUTCString()
+
+      document.getElementById("tweet_date_selection").innerHTML= formatted_tweet_date_selection
+      document.getElementById("stock_date_selection").innerHTML= ""
+
       
     };
+
+    document.getElementById('stock_date').onchange = function () {
+
+
+      var stock_date_selection = document.getElementById("stock_date")
+      var stock_date = new Date(Date.parse(stock_date_selection.value));
+      var formatted_stock_date_selection = stock_date.toUTCString()
+
+      document.getElementById("stock_date_selection").innerHTML= formatted_stock_date_selection
+    }
+
+    document.getElementById('company_name').onchange = function () {
+
+      var company_selection = document.getElementById("company_name").value
+      document.getElementById("company_selection").innerHTML= company_selection
+
+
+    }
 
 
     //function to restrict weekends for stock graph date picker
