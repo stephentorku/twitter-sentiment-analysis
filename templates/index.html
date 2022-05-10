@@ -323,6 +323,8 @@
 
             <script>
                 $(document).ready(function() {
+                   $("#load").hide()
+                    $("#loader").show();
                     document.getElementById("sentiment_date").defaultValue = "2022-04-18"
                     document.getElementById("stock_date").defaultValue = "2022-04-18"
 
@@ -867,8 +869,7 @@
                     });
                     ajaxCall()
                     function ajaxCall() {
-                    $("#load").hide()
-                    $("#loader").show();
+
                         $.ajax({
                             url: "/get_data",
                             type: "GET",
